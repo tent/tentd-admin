@@ -2,10 +2,31 @@ require 'sinatra/base'
 require 'sprockets'
 
 class TentAdmin < Sinatra::Base
+  AdminConfig = Struct.new(:app, :app_authorization).new(nil, nil)
+
   configure :development do |config|
     require 'sinatra/reloader'
     register Sinatra::Reloader
     config.also_reload "*.rb"
+
+    # Init App/AppAuthorization
+    mac_key_id = "00000000"
+    unless tent_app = ::TentD::Model::App.first(:mac_key_id => mac_key_id)
+      tent_app = ::TentD::Model::App.create(
+        :name => "Tent Admin",
+        :description => "Default Tent Admin App",
+        :mac_key_id => mac_key_id
+      )
+
+      tent_app.authorizations.create(
+        :scopes => %w{ read_posts write_posts import_posts read_profile write_profile read_followers write_followers read_followings write_followings read_groups write_groups read_permissions write_permissions read_apps write_apps follow_ui read_secrets write_secrets },
+        :profile_info_types => ['all'],
+        :post_types => ['all']
+      )
+    end
+    AdminConfig.app = tent_app
+    AdminConfig.app_authorization = tent_app.authorizations.first
+  end
 
   helpers do
     def path_prefix

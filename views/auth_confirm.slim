@@ -6,7 +6,7 @@ form.form-horizontal action=full_path("auth/confirm") method="POST"
   .row
     .span6
       legend Scopes
-      - @app.scopes.each_pair do |scope, description|
+      - (@app.scopes || {}).each_pair do |scope, description|
         .control-group
           .controls
             label.control-label

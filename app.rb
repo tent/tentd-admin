@@ -95,6 +95,7 @@ class TentAdmin < Sinatra::Base
   end
 
   def tent_client(env)
+    ::TentClient.new(server_url_from_env(env), AdminConfig.app_authorization.auth_details)
   end
 
   assets = Sprockets::Environment.new do |env|
@@ -124,7 +125,7 @@ class TentAdmin < Sinatra::Base
     session[:current_app_params] = @app_params
     @app_params = Hashie::Mash.new(@app_params)
 
-    client = ::TentClient.new(server_url_from_env(env), AdminConfig.app_authorization.auth_details)
+    client = tent_client(env)
     @app = session[:current_app] = client.app.find(@app_params.client_id).body
     @app = @app.kind_of?(Hash) ? Hashie::Mash.new(@app) : @app
 
@@ -158,20 +159,23 @@ class TentAdmin < Sinatra::Base
     @app_params = Hashie::Mash.new(session.delete(:current_app_params))
 
     data = {
-      :scopes => @app.scopes.inject([]) { |memo, (k,v)|
+      :scopes => (@app.scopes || {}).inject([]) { |memo, (k,v)|
         params[k] == 'on' ? memo << k : nil
         memo
       },
-      :profile_info_types => @app_params.tent_profile_info_types.split(',').select { |type|
+      :profile_info_types => @app_params.tent_profile_info_types.to_s.split(',').select { |type|
         params[type] == 'on'
       },
-      :post_types => @app_params.tent_post_types.split(',').select { |type|
+      :post_types => @app_params.tent_post_types.to_s.split(',').select { |type|
         params[type] == 'on'
       }
     }
     client = tent_client(env)
-    client.app.authorization.create(@app.id, data).inspect
-
-    # TODO redirect to redirect_uri with code = app_authorization.token_code
+    authorization = Hashie::Mash.new(client.app.authorization.create(@app.id, data).body)
+    redirect_uri = URI(@app_params.redirect_uri.to_s)
+    redirect_uri.query ||= ""
+    redirect_uri.query +="&code=#{authorization.token_code}"
+    redirect_uri.query += "&state=#{@app_params.state}" if @app_params.has_key?(:state)
+    redirect redirect_uri.to_s
   end
 end

@@ -1,8 +1,12 @@
 require 'sinatra/base'
 require 'sprockets'
+require 'securerandom'
 
 class TentAdmin < Sinatra::Base
   AdminConfig = Struct.new(:app, :app_authorization).new(nil, nil)
+
+  enable :sessions
+  set :session_secret, SecureRandom.hex(32)
 
   configure :development do |config|
     require 'sinatra/reloader'
@@ -26,6 +30,10 @@ class TentAdmin < Sinatra::Base
     end
     AdminConfig.app = tent_app
     AdminConfig.app_authorization = tent_app.authorizations.first
+  end
+
+  use Rack::Auth::Basic, "Admin Area" do |username, password|
+    username == ENV['ADMIN_USERNAME'] && password == ENV['ADMIN_PASSWORD']
   end
 
   helpers do

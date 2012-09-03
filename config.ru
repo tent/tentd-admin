@@ -4,11 +4,7 @@ Bundler.require
 require './app'
 
 map '/' do
-  run TentD.new(
-    :database => "postgres://localhost/tent-admin"
-  )
-
-  DataMapper.auto_upgrade!
+  run TentD.new
 end
 
 map '/admin' do

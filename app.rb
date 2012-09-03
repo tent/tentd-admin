@@ -13,6 +13,10 @@ class TentAdmin < Sinatra::Base
     register Sinatra::Reloader
     config.also_reload "*.rb"
 
+    # Setup Database
+    DataMapper.setup(:default, ENV['DATABASE_URL'])
+    DataMapper.auto_upgrade!
+
     # Init App/AppAuthorization
     mac_key_id = "00000000"
     unless tent_app = ::TentD::Model::App.first(:mac_key_id => mac_key_id)

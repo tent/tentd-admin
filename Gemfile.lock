@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git@github.com:tent/tentd.git
-  revision: 1f46315b5abc105769066ee0c6125ee002e8ae1a
+  revision: bd6170a9eb73b06dcab4f14be3f4e126501b99e8
   specs:
     tentd (0.0.1)
       data_mapper (~> 1.2.0)

@@ -1,13 +1,15 @@
-PATH
-  remote: ../tent-client
+GIT
+  remote: git@github.com:tent/tent-client-ruby.git
+  revision: 209a9fce10ccfa9990312596635797ba4361139d
   specs:
     tent-client (0.0.1)
       faraday (= 0.8.4)
       faraday_middleware (= 0.8.8)
       nokogiri
 
-PATH
-  remote: ../tent-server
+GIT
+  remote: git@github.com:tent/tentd.git
+  revision: 461373f82a0983a4d0a1151fb2c16b6bd3fc93ae
   specs:
     tentd (0.0.1)
       data_mapper (~> 1.2.0)

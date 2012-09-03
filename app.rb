@@ -6,6 +6,15 @@ class TentAdmin < Sinatra::Base
     require 'sinatra/reloader'
     register Sinatra::Reloader
     config.also_reload "*.rb"
+
+  helpers do
+    def path_prefix
+      env['SCRIPT_NAME']
+    end
+
+    def full_path(path)
+      "#{path_prefix}/#{path}"
+    end
   end
 
   assets = Sprockets::Environment.new do |env|

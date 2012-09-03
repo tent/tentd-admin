@@ -128,19 +128,27 @@ class TentAdmin < Sinatra::Base
     @app = session[:current_app] = client.app.find(@app_params.client_id).body
     @app = @app.kind_of?(Hash) ? Hashie::Mash.new(@app) : @app
 
+    redirect_uri = URI(@app_params.redirect_uri.to_s)
+    redirect_uri.query ||= ""
     if @app.kind_of?(String)
-      uri = @app_params.redirect_uri.to_s.sub(%r{\??(?=[^/]*$)}, "?error=#{@app}&")
-      redirect uri
+      redirect_uri.query += "error=#{@app}"
+      redirect redirect_uri.to_s
       return
     end
 
     unless @app.redirect_uris.to_a.include?(@app_params.redirect_uri)
-      uri = @app_params.redirect_uri.to_s.sub(%r{\??(?=[^/]*$)}, '?error=invalid_redirect_uri&')
-      redirect uri
+      redirect_uri.query += 'error=invalid_redirect_uri'
+      redirect redirect_uri.to_s
       return
     end
 
-    # TODO if authorization with @app already exists, redirect to redirect_uri
+    if @app.authorizations.any?
+      authorization = @app.authorizations.first
+      redirect_uri.query +="&code=#{authorization.token_code}"
+      redirect_uri.query += "&state=#{@app_params.state}" if @app_params.has_key?(:state)
+      redirect redirect_uri.to_s
+      return
+    end
 
     slim :auth_confirm
   end

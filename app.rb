@@ -1,6 +1,10 @@
 require 'sinatra/base'
 require 'sprockets'
 require 'securerandom'
+require 'hashie'
+require 'tentd'
+require 'tent-client'
+require 'rack/csrf'
 
 class TentAdmin < Sinatra::Base
   AdminConfig = Struct.new(:app, :app_authorization).new(nil, nil)
@@ -23,7 +27,13 @@ class TentAdmin < Sinatra::Base
       tent_app = ::TentD::Model::App.create(
         :name => "Tent Admin",
         :description => "Default Tent Admin App",
-        :mac_key_id => mac_key_id
+        :mac_key_id => mac_key_id,
+        :redirect_uris => %w{ http://localhost:5000/admin?foo=bar },
+        :scopes => {
+          "read_posts" => "Show posts feed",
+          "write_posts" => "Publish posts",
+          "read_profile" => "Read your profile"
+        }
       )
 
       tent_app.authorizations.create(
@@ -32,6 +42,7 @@ class TentAdmin < Sinatra::Base
         :post_types => ['all']
       )
     end
+
     AdminConfig.app = tent_app
     AdminConfig.app_authorization = tent_app.authorizations.first
   end
@@ -39,6 +50,8 @@ class TentAdmin < Sinatra::Base
   use Rack::Auth::Basic, "Admin Area" do |username, password|
     username == ENV['ADMIN_USERNAME'] && password == ENV['ADMIN_PASSWORD']
   end
+
+  use Rack::Csrf, :raise => true
 
   helpers do
     def path_prefix
@@ -48,6 +61,40 @@ class TentAdmin < Sinatra::Base
     def full_path(path)
       "#{path_prefix}/#{path}"
     end
+
+    def csrf_tag
+      Rack::Csrf.tag(env)
+    end
+
+    def scope_name(scope)
+      {
+        :read_posts        => "Read Posts",
+        :write_posts       => "Write Posts",
+        :import_posts      => "Import Posts",
+        :read_profile      => "Read Profile",
+        :write_profile     => "Write Profile",
+        :read_followers    => "Read Followers",
+        :write_followers   => "Write Followers",
+        :read_followings   => "Read Followings",
+        :write_followings  => "Write Followings",
+        :read_groups       => "Read Groups",
+        :write_groups      => "Write Groups",
+        :read_permissions  => "Read Permissions",
+        :write_permissions => "Write Permissions",
+        :read_apps         => "Read Apps",
+        :write_apps        => "Write Apps",
+        :follow_ui         => "Follow UI",
+        :read_secrets      => "Read Secrets",
+        :write_secrets     => "Write Secrets"
+      }[scope.to_sym]
+    end
+  end
+
+  def server_url_from_env(env)
+    env['rack.url_scheme'] + "://" + env['HTTP_HOST']
+  end
+
+  def tent_client(env)
   end
 
   assets = Sprockets::Environment.new do |env|
@@ -67,5 +114,56 @@ class TentAdmin < Sinatra::Base
 
   get '/' do
     slim :dashboard
+  end
+
+  get '/auth/confirm' do
+    @app_params = %w{ client_id redirect_uri state scope tent_profile_info_types tent_post_types }.inject({}) { |memo, k|
+      memo[k] = params[k] if params.has_key?(k)
+      memo
+    }
+    session[:current_app_params] = @app_params
+    @app_params = Hashie::Mash.new(@app_params)
+
+    client = ::TentClient.new(server_url_from_env(env), AdminConfig.app_authorization.auth_details)
+    @app = session[:current_app] = client.app.find(@app_params.client_id).body
+    @app = @app.kind_of?(Hash) ? Hashie::Mash.new(@app) : @app
+
+    if @app.kind_of?(String)
+      uri = @app_params.redirect_uri.to_s.sub(%r{\??(?=[^/]*$)}, "?error=#{@app}&")
+      redirect uri
+      return
+    end
+
+    unless @app.redirect_uris.to_a.include?(@app_params.redirect_uri)
+      uri = @app_params.redirect_uri.to_s.sub(%r{\??(?=[^/]*$)}, '?error=invalid_redirect_uri&')
+      redirect uri
+      return
+    end
+
+    # TODO if authorization with @app already exists, redirect to redirect_uri
+
+    slim :auth_confirm
+  end
+
+  post '/auth/confirm' do
+    @app = Hashie::Mash.new(session.delete(:current_app))
+    @app_params = Hashie::Mash.new(session.delete(:current_app_params))
+
+    data = {
+      :scopes => @app.scopes.inject([]) { |memo, (k,v)|
+        params[k] == 'on' ? memo << k : nil
+        memo
+      },
+      :profile_info_types => @app_params.tent_profile_info_types.split(',').select { |type|
+        params[type] == 'on'
+      },
+      :post_types => @app_params.tent_post_types.split(',').select { |type|
+        params[type] == 'on'
+      }
+    }
+    client = tent_client(env)
+    client.app.authorization.create(@app.id, data).inspect
+
+    # TODO redirect to redirect_uri with code = app_authorization.token_code
   end
 end

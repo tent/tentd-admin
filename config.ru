@@ -3,6 +3,8 @@ Bundler.require
 
 require './app'
 
+use Rack::CommonLogger
+
 map '/' do
   run TentD.new
 end

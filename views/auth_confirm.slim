@@ -1,0 +1,34 @@
+h2 Authorize #{ @app.name }
+
+form.form-horizontal action=full_path("auth/confirm") method="POST"
+  == csrf_tag
+
+  .row
+    .span6
+      legend Scopes
+      - @app.scopes.each_pair do |scope, description|
+        .control-group
+          .controls
+            label.control-label
+              input.pull-left name=scope type='checkbox' checked=true = ' ' + scope_name(scope)
+              blockquote = description
+
+    .span6
+      legend Post Types
+      - @app_params.tent_post_types.to_s.split(',').each do |type|
+        .control-group
+          .controls
+            label.control-label
+              input.pull-left name=type type='checkbox' checked=true = ' ' + type
+
+      legend Profile Info Types
+      - @app_params.tent_profile_info_types.to_s.split(',').each do |type|
+        .control-group
+          .controls
+            label.control-label
+              input.pull-left name=type type='checkbox' checked=true = ' ' + type
+
+    .span12
+      .form-actions
+        input.btn.btn-success type='submit' value='Grant Access'
+        input.btn.btn-danger.pull-right type='submit' value='Abort'

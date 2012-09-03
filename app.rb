@@ -51,7 +51,7 @@ class TentAdmin < Sinatra::Base
     username == ENV['ADMIN_USERNAME'] && password == ENV['ADMIN_PASSWORD']
   end
 
-  use Rack::Csrf, :raise => true
+  use Rack::Csrf
 
   helpers do
     def path_prefix
@@ -158,6 +158,15 @@ class TentAdmin < Sinatra::Base
     @app = Hashie::Mash.new(session.delete(:current_app))
     @app_params = Hashie::Mash.new(session.delete(:current_app_params))
 
+    redirect_uri = URI(@app_params.redirect_uri.to_s)
+    redirect_uri.query ||= ""
+
+    if params[:commit] == 'Abort'
+      redirect_uri.query += "error=user_abort"
+      redirect redirect_uri.to_s
+      return
+    end
+
     data = {
       :scopes => (@app.scopes || {}).inject([]) { |memo, (k,v)|
         params[k] == 'on' ? memo << k : nil
@@ -172,8 +181,7 @@ class TentAdmin < Sinatra::Base
     }
     client = tent_client(env)
     authorization = Hashie::Mash.new(client.app.authorization.create(@app.id, data).body)
-    redirect_uri = URI(@app_params.redirect_uri.to_s)
-    redirect_uri.query ||= ""
+
     redirect_uri.query +="&code=#{authorization.token_code}"
     redirect_uri.query += "&state=#{@app_params.state}" if @app_params.has_key?(:state)
     redirect redirect_uri.to_s

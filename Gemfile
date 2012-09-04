@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 ruby '1.9.3'
 
-gem 'tent-client', :git => "git@github.com:tent/tent-client-ruby.git"
-gem 'tentd', :git => "git@github.com:tent/tentd.git"
+gem 'tent-client', :git => 'git@github.com:tent/tent-client-ruby.git', :branch => 'master'
+gem 'tentd', :git => 'git@github.com:tent/tentd.git', :branch => 'master'
 
 gem 'puma'
 gem 'sinatra', :require => false

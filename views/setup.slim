@@ -1,0 +1,20 @@
+h2 Server Setup
+
+form.form-horizontal action=full_path("setup") method="POST"
+  == csrf_tag
+
+  .row
+    .span6
+      .control-group
+        label.control-label Entity URI
+        .controls
+          input.input-xxlarge type='text' name='entity' value=@core_profile_info.entity
+
+      .control-group
+        label.control-label Server URI
+        .controls
+          input.input-xxlarge type='text' name='servers' value=@core_profile_info.servers.first
+
+    .span12
+      .form-actions
+        input.btn.btn-success type='submit' name='commit' value='Confirm'

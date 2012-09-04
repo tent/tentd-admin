@@ -113,8 +113,42 @@ class TentDAdmin < Sinatra::Base
     assets.call(new_env)
   end
 
+  before do
+    if ::TentD::Model::ProfileInfo.count == 0 && env['PATH_INFO'] != '/setup' && env['PATH_INFO'] !~ /^\/assets/
+      redirect full_path('setup')
+      return
+    end
+  end
+
   get '/' do
     slim :dashboard
+  end
+
+  get '/setup' do
+    if ::TentD::Model::ProfileInfo.count > 0
+      redirect full_path('')
+      return
+    end
+
+    @core_profile_info = Hashie::Mash.new(
+      :entity => ENV['TENT_ENTITY'] || server_url_from_env(env),
+      :servers => [server_url_from_env(env)]
+    )
+
+    slim :setup
+  end
+
+  post '/setup' do
+    core_profile_info = {
+      :entity => params[:entity],
+      :servers => [params[:servers]],
+      :licenses => [],
+      :public => true
+    }
+
+    client = tent_client(env)
+    client.profile.update("https://tent.io/types/info/core/v0.1.0", core_profile_info)
+    redirect full_path('')
   end
 
   get '/auth/confirm' do

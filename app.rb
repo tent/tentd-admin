@@ -1,9 +1,11 @@
+require 'bundler/setup'
 require 'sinatra/base'
 require 'sprockets'
 require 'hashie'
 require 'tentd'
 require 'tent-client'
 require 'rack/csrf'
+require 'slim'
 
 class TentDAdmin < Sinatra::Base
   AdminConfig = Struct.new(:app, :app_authorization).new(nil, nil)

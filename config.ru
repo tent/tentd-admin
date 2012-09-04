@@ -1,6 +1,3 @@
-require 'bundler'
-Bundler.require
-
 require './app'
 
 use Rack::CommonLogger

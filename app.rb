@@ -43,6 +43,13 @@ class TentDAdmin < Sinatra::Base
       )
     end
 
+    # Set TENT_ENTITY ENV
+    if !ENV['TENT_ENTITY']
+      if info = ::TentD::Model::ProfileInfo.first(:type => TentD::Model::ProfileInfo::TENT_PROFILE_TYPE_URI)
+        ENV['TENT_ENTITY'] = info.content['entity']
+      end
+    end
+
     AdminConfig.app = tent_app
     AdminConfig.app_authorization = tent_app.authorizations.first
   end

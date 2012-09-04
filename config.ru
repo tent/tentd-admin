@@ -10,5 +10,5 @@ map '/' do
 end
 
 map '/admin' do
-  run TentAdmin
+  run TentDAdmin
 end

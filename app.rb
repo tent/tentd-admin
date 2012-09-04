@@ -6,7 +6,7 @@ require 'tentd'
 require 'tent-client'
 require 'rack/csrf'
 
-class TentAdmin < Sinatra::Base
+class TentDAdmin < Sinatra::Base
   AdminConfig = Struct.new(:app, :app_authorization).new(nil, nil)
 
   enable :sessions

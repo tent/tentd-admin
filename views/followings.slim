@@ -1,0 +1,10 @@
+h2.page-header Entities you are following
+
+form.form-horizontal action=full_path("/followings") method="POST"
+  == csrf_tag
+
+  .control-group
+    label.control-label Entity URI
+    .controls
+      input.input-xxlarge type='text' name='entity' &nbsp;
+      input.btn.btn-success type='submit' name='commit' value='Follow'

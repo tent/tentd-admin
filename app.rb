@@ -152,8 +152,19 @@ class TentDAdmin < Sinatra::Base
     }
 
     client = tent_client(env)
-    client.profile.update("https://tent.io/types/info/core/v0.1.0", core_profile_info)
+    client.profile.update(TentD::Model::ProfileInfo::TENT_PROFILE_TYPE_URI, core_profile_info)
     redirect full_path('')
+  end
+
+  get '/followings' do
+    slim :followings
+  end
+
+  post '/followings' do
+    client = tent_client(env)
+    res = client.following.create(params[:entity])
+    return res.inspect
+    # TODO: create following
   end
 
   get '/auth/confirm' do

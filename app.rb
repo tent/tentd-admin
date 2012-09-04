@@ -157,14 +157,15 @@ class TentDAdmin < Sinatra::Base
   end
 
   get '/followings' do
+    client = tent_client(env)
+    @followings = client.following.fetch.body
     slim :followings
   end
 
   post '/followings' do
     client = tent_client(env)
-    res = client.following.create(params[:entity])
-    return res.inspect
-    # TODO: create following
+    client.following.create(params[:entity])
+    redirect full_path('/followings')
   end
 
   get '/auth/confirm' do

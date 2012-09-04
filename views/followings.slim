@@ -3,6 +3,10 @@ h2.page-header Entities you are following
 form.form-horizontal action=full_path("/followings") method="POST"
   == csrf_tag
 
+  ul
+    - @followings.each do |following|
+      li= following['entity']
+
   .control-group
     label.control-label Entity URI
     .controls

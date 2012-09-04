@@ -1,6 +1,5 @@
 require 'sinatra/base'
 require 'sprockets'
-require 'securerandom'
 require 'hashie'
 require 'tentd'
 require 'tent-client'
@@ -10,7 +9,6 @@ class TentDAdmin < Sinatra::Base
   AdminConfig = Struct.new(:app, :app_authorization).new(nil, nil)
 
   enable :sessions
-  set :session_secret, SecureRandom.hex(32)
 
   configure :development do |config|
     require 'sinatra/reloader'
@@ -66,7 +64,7 @@ class TentDAdmin < Sinatra::Base
     end
 
     def full_path(path)
-      "#{path_prefix}/#{path}"
+      "#{path_prefix}/#{path}".gsub(%r{//}, '/')
     end
 
     def csrf_tag

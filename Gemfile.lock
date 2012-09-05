@@ -1,16 +1,17 @@
 GIT
   remote: git@github.com:tent/tent-client-ruby.git
-  revision: 32eefadc6a36e68f9f9675ca122abe4b865e53e2
+  revision: 6038e4334522bc67d79d0eb48c03036a9b67ae34
   branch: master
   specs:
     tent-client (0.0.1)
       faraday (= 0.8.4)
       faraday_middleware (= 0.8.8)
+      json
       nokogiri
 
 GIT
   remote: git@github.com:tent/tentd.git
-  revision: 2b43229768571febb745a04c6187fa2d8632a2f6
+  revision: d5aeaf614de88ebdb9775199ec50612657cf9961
   branch: master
   specs:
     tentd (0.0.1)

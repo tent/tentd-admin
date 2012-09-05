@@ -95,6 +95,10 @@ class TentDAdmin < Sinatra::Base
         :write_secrets     => "Write Secrets"
       }[scope.to_sym]
     end
+
+    def nav_active_class(path)
+      env['PATH_INFO'] == path ? 'active' : ''
+    end
   end
 
   def server_url_from_env(env)

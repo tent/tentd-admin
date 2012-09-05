@@ -17,6 +17,8 @@ class TentDAdmin < Sinatra::Base
     register Sinatra::Reloader
     config.also_reload "*.rb"
 
+    config.method_override = true
+
     # Setup Database
     DataMapper.setup(:default, ENV['DATABASE_URL'])
     DataMapper.auto_upgrade!
@@ -71,6 +73,10 @@ class TentDAdmin < Sinatra::Base
 
     def csrf_tag
       Rack::Csrf.tag(env)
+    end
+
+    def method_override(method)
+      "<input type='hidden' name='_method' value='#{method}' />"
     end
 
     def scope_name(scope)
@@ -172,6 +178,26 @@ class TentDAdmin < Sinatra::Base
     client = tent_client
     client.following.create(params[:entity])
     redirect full_path('/followings')
+  end
+
+  get '/apps' do
+    client = tent_client
+    @apps = client.app.fetch.body
+    @apps.kind_of?(Array) ? @apps.map! { |a| Hashie::Mash.new(a) } : @apps = []
+    @apps = @apps.sort_by { |a| -a.authorizations.size }
+    slim :apps
+  end
+
+  delete '/apps/:app_id' do
+    client = tent_client
+    client.app.delete(params[:app_id])
+    redirect full_path('/apps')
+  end
+
+  delete '/apps/:app_id/authorizations/:app_auth_id' do
+    client = tent_client
+    client.app.authorization.delete(params[:app_id], params[:app_auth_id])
+    redirect full_path('/apps')
   end
 
   get '/auth/confirm' do

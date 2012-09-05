@@ -1,2 +1,17 @@
 //= require bootstrap
 //= require bootstrap-responsive
+//= require_self
+
+li.app
+  .remove-app
+    display: none
+  &:hover
+    .remove-app
+      display: block
+
+li.authorization
+  .remove-auth
+    display: none
+  &:hover
+    .remove-auth
+      display: block

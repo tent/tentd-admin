@@ -99,14 +99,14 @@ class TentDAdmin < Sinatra::Base
     def nav_active_class(path)
       env['PATH_INFO'] == path ? 'active' : ''
     end
-  end
 
-  def server_url_from_env(env)
-    env['rack.url_scheme'] + "://" + env['HTTP_HOST']
-  end
+    def server_url
+      env['rack.url_scheme'] + "://" + env['HTTP_HOST']
+    end
 
-  def tent_client(env)
-    ::TentClient.new(server_url_from_env(env), AdminConfig.app_authorization.auth_details)
+    def tent_client
+      ::TentClient.new(server_url, AdminConfig.app_authorization.auth_details)
+    end
   end
 
   assets = Sprockets::Environment.new do |env|
@@ -142,8 +142,8 @@ class TentDAdmin < Sinatra::Base
     end
 
     @core_profile_info = Hashie::Mash.new(
-      :entity => ENV['TENT_ENTITY'] || server_url_from_env(env),
-      :servers => [server_url_from_env(env)]
+      :entity => ENV['TENT_ENTITY'] || server_url,
+      :servers => [server_url]
     )
 
     slim :setup
@@ -157,19 +157,19 @@ class TentDAdmin < Sinatra::Base
       :public => true
     }
 
-    client = tent_client(env)
+    client = tent_client
     client.profile.update(TentD::Model::ProfileInfo::TENT_PROFILE_TYPE_URI, core_profile_info)
     redirect full_path('')
   end
 
   get '/followings' do
-    client = tent_client(env)
+    client = tent_client
     @followings = client.following.fetch.body
     slim :followings
   end
 
   post '/followings' do
-    client = tent_client(env)
+    client = tent_client
     client.following.create(params[:entity])
     redirect full_path('/followings')
   end
@@ -182,7 +182,7 @@ class TentDAdmin < Sinatra::Base
     session[:current_app_params] = @app_params
     @app_params = Hashie::Mash.new(@app_params)
 
-    client = tent_client(env)
+    client = tent_client
     @app = session[:current_app] = client.app.find(@app_params.client_id).body
     @app = @app.kind_of?(Hash) ? Hashie::Mash.new(@app) : @app
 
@@ -238,7 +238,7 @@ class TentDAdmin < Sinatra::Base
         params[type] == 'on'
       }
     }
-    client = tent_client(env)
+    client = tent_client
     authorization = Hashie::Mash.new(client.app.authorization.create(@app.id, data).body)
 
     redirect_uri.query +="&code=#{authorization.token_code}"

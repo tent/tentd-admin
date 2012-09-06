@@ -223,7 +223,7 @@ class TentDAdmin < Sinatra::Base
   end
 
   get '/auth/confirm' do
-    @app_params = %w{ client_id redirect_uri state scope tent_profile_info_types tent_post_types }.inject({}) { |memo, k|
+    @app_params = %w{ client_id redirect_uri state scope tent_profile_info_types tent_post_types tent_notification_url }.inject({}) { |memo, k|
       memo[k] = params[k] if params.has_key?(k)
       memo
     }
@@ -250,8 +250,17 @@ class TentDAdmin < Sinatra::Base
       return
     end
 
+    # TODO: allow updating tent_profile_info_types, tent_post_types, scopes
+    #       (user must confirm adding anything)
+
     if @app.authorizations.any?
       authorization = @app.authorizations.first
+
+      unless authorization.notification_url == @app_params.tent_notification_url
+        client = tent_client
+        client.app.authorization.update(@app.id, authorization.id, :notification_url => @app_params.notification_url)
+      end
+
       redirect_uri.query +="&code=#{authorization.token_code}"
       redirect_uri.query += "&state=#{@app_params.state}" if @app_params.has_key?(:state)
       redirect redirect_uri.to_s
@@ -284,7 +293,8 @@ class TentDAdmin < Sinatra::Base
       },
       :post_types => @app_params.tent_post_types.to_s.split(',').select { |type|
         params[type] == 'on'
-      }
+      },
+      :notification_url => @app_params.tent_notification_url
     }
     client = tent_client
     authorization = Hashie::Mash.new(client.app.authorization.create(@app.id, data).body)

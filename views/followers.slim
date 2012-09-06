@@ -1,0 +1,12 @@
+h2.page-header Entities following you
+
+- @followers.each do |follower|
+  .row.follower
+    .span4
+      h4 = follower.entity
+
+    .span2
+      form.remove action=full_path("/followers/#{follower.id}") method='POST'
+        == csrf_tag
+        == method_override('DELETE')
+        input.btn.btn-danger type='submit' value='Remove' title='Stop sending notifications'

@@ -189,6 +189,19 @@ class TentDAdmin < Sinatra::Base
     redirect full_path('/followings')
   end
 
+  get '/followers' do
+    client = tent_client
+    @followers = client.follower.fetch.body
+    @followers.map! { |f| Hashie::Mash.new(f) }
+    slim :followers
+  end
+
+  delete '/followers/:id' do
+    client = tent_client
+    client.follower.delete(params[:id])
+    redirect full_path('/followers')
+  end
+
   get '/apps' do
     client = tent_client
     @apps = client.app.fetch.body

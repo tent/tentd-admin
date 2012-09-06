@@ -2,14 +2,14 @@
 //= require bootstrap-responsive
 //= require_self
 
-.app, .following
-  .remove-app, .unfollow
+.app, .following, .follower
+  .remove-app, .unfollow, .remove
     display: none
   &:hover
-    .remove-app, .unfollow
+    .remove-app, .unfollow, .remove
       display: block
 
-.following
+.following, .follower
   h4
     line-height: 30px
 

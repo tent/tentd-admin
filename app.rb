@@ -6,6 +6,8 @@ require 'tentd'
 require 'tent-client'
 require 'rack/csrf'
 require 'slim'
+require 'coffee_script'
+require 'sass'
 
 class TentDAdmin < Sinatra::Base
   AdminConfig = Struct.new(:app, :app_authorization).new(nil, nil)

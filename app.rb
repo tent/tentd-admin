@@ -171,12 +171,19 @@ class TentDAdmin < Sinatra::Base
   get '/followings' do
     client = tent_client
     @followings = client.following.fetch.body
+    @followings.map! { |f| Hashie::Mash.new(f) }
     slim :followings
   end
 
   post '/followings' do
     client = tent_client
     client.following.create(params[:entity])
+    redirect full_path('/followings')
+  end
+
+  delete '/followings/:id' do
+    client = tent_client
+    client.following.delete(params[:id])
     redirect full_path('/followings')
   end
 

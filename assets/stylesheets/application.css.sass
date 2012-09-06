@@ -2,14 +2,18 @@
 //= require bootstrap-responsive
 //= require_self
 
-li.app
-  .remove-app
+.app, .following
+  .remove-app, .unfollow
     display: none
   &:hover
-    .remove-app
+    .remove-app, .unfollow
       display: block
 
-li.authorization
+.following
+  h4
+    line-height: 30px
+
+.authorization
   .remove-auth
     display: none
   &:hover

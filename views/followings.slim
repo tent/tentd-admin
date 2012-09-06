@@ -3,12 +3,20 @@ h2.page-header Entities you are following
 form.form-horizontal action=full_path("/followings") method="POST"
   == csrf_tag
 
-  ul
-    - @followings.each do |following|
-      li= following['entity']
-
   .control-group
     label.control-label Entity URI
     .controls
       input.input-xxlarge type='text' name='entity' &nbsp;
       input.btn.btn-success type='submit' name='commit' value='Follow'
+
+- @followings.each do |following|
+  .row.following
+    .span4
+      h4 = following['entity']
+
+    .span2
+      form.unfollow action=full_path("/followings/#{following.id}") method='POST'
+        == csrf_tag
+        == method_override('DELETE')
+        input.btn.btn-danger type='submit' value='Unfollow'
+

@@ -1,6 +1,6 @@
 h2 Authorize #{ @app.name }
 
-form.form-horizontal action=full_path("auth/confirm") method="POST"
+form.form-horizontal action=full_path("oauth/confirm") method="POST"
   == csrf_tag
 
   .row

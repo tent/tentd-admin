@@ -222,7 +222,7 @@ class TentDAdmin < Sinatra::Base
     redirect full_path('/apps')
   end
 
-  get '/auth/confirm' do
+  get '/oauth/confirm' do
     @app_params = %w{ client_id redirect_uri state scope tent_profile_info_types tent_post_types tent_notification_url }.inject({}) { |memo, k|
       memo[k] = params[k] if params.has_key?(k)
       memo
@@ -270,7 +270,7 @@ class TentDAdmin < Sinatra::Base
     slim :auth_confirm
   end
 
-  post '/auth/confirm' do
+  post '/oauth/confirm' do
     @app = Hashie::Mash.new(session.delete(:current_app))
     @app_params = Hashie::Mash.new(session.delete(:current_app_params))
 

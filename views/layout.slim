@@ -10,6 +10,9 @@ body
     .navbar-inner
       .brand TentD Admin
       ul.nav
+        li class=nav_active_class('/profile')
+          a href=full_path('/profile') Profile
+
         li class=nav_active_class('/apps')
           a href=full_path('/apps') Apps
 
@@ -18,6 +21,10 @@ body
 
         li class=nav_active_class('/followers')
           a href=full_path('/followers') Followers
+
+      ul.nav.pull-right
+        li
+          a href='https://github.com/tent/tentd' Check for updates on Github
 
   .container
     == yield

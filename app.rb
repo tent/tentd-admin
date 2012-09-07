@@ -165,6 +165,8 @@ class TentDAdmin < Sinatra::Base
       :public => true
     }
 
+    ENV['TENT_ENTITY'] = params[:entity]
+
     client = tent_client
     client.profile.update(TentD::Model::ProfileInfo::TENT_PROFILE_TYPE_URI, core_profile_info)
     redirect full_path('')

@@ -172,7 +172,7 @@ class TentDAdmin < Sinatra::Base
 
   get '/followings' do
     client = tent_client
-    @followings = client.following.fetch.body
+    @followings = client.following.list.body
     @followings.map! { |f| Hashie::Mash.new(f) }
     slim :followings
   end
@@ -191,7 +191,7 @@ class TentDAdmin < Sinatra::Base
 
   get '/followers' do
     client = tent_client
-    @followers = client.follower.fetch.body
+    @followers = client.follower.list.body
     @followers.map! { |f| Hashie::Mash.new(f) }
     slim :followers
   end
@@ -204,7 +204,7 @@ class TentDAdmin < Sinatra::Base
 
   get '/apps' do
     client = tent_client
-    @apps = client.app.fetch.body
+    @apps = client.app.list.body
     @apps.kind_of?(Array) ? @apps.map! { |a| Hashie::Mash.new(a) } : @apps = []
     @apps = @apps.sort_by { |a| -a.authorizations.size }
     slim :apps
@@ -231,7 +231,7 @@ class TentDAdmin < Sinatra::Base
     @app_params = Hashie::Mash.new(@app_params)
 
     client = tent_client
-    @app = session[:current_app] = client.app.find(@app_params.client_id).body
+    @app = session[:current_app] = client.app.get(@app_params.client_id).body
     @app = @app.kind_of?(Hash) ? Hashie::Mash.new(@app) : @app
 
     @app ||= "Invalid client_id"

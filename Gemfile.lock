@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:tent/tent-client-ruby.git
-  revision: 6038e4334522bc67d79d0eb48c03036a9b67ae34
+  revision: 2ffbb81ced9d8fc87b13340a840c4d8f1542a278
   branch: master
   specs:
     tent-client (0.0.1)
@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: git@github.com:tent/tentd.git
-  revision: d5aeaf614de88ebdb9775199ec50612657cf9961
+  revision: 010a5645be74d61bdfc3d49640cb6743dcf7860c
   branch: master
   specs:
     tentd (0.0.1)
@@ -85,7 +85,7 @@ GEM
       dm-core (~> 1.2.0)
     do_postgres (0.10.8)
       data_objects (= 0.10.8)
-    eventmachine (0.12.10)
+    eventmachine (1.0.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
     faraday (0.8.4)
@@ -102,7 +102,7 @@ GEM
     multi_json (1.3.6)
     multipart-post (1.1.5)
     nokogiri (1.5.5)
-    puma (1.6.2)
+    puma (1.6.3)
       rack (~> 1.2)
     rack (1.4.1)
     rack-mount (0.8.3)
@@ -125,16 +125,16 @@ GEM
       rack-test
       sinatra (~> 1.3.0)
       tilt (~> 1.3)
-    slim (1.2.2)
-      temple (~> 0.4.0)
+    slim (1.3.0)
+      temple (~> 0.4.1)
       tilt (~> 1.3.3)
-    sprockets (2.4.5)
+    sprockets (2.5.0)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     stringex (1.4.0)
-    temple (0.4.0)
+    temple (0.4.1)
     tilt (1.3.3)
     uuidtools (2.1.3)
 

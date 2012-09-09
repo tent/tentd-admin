@@ -12,7 +12,7 @@ In order to get tentd-admin running, you need Ruby 1.9, Bundler, and PostgreSQL.
 ```shell
 createdb tent_server
 bundle install
-DATABASE_URL=postgres://localhost/tent_server ADMIN_USER=admin ADMIN_PASSWORD=admin bundle exec puma -p 3000
+DATABASE_URL=postgres://localhost/tent_server ADMIN_USERNAME=admin ADMIN_PASSWORD=admin bundle exec puma -p 3000
 open http://localhost:3000
 ```
 

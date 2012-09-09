@@ -23,7 +23,7 @@ brew install ruby
 
 If you need to switch between ruby versions, use
 [rbenv](https://github.com/sstephenson/rbenv) and
-[ruby-build](https://github.com/sstephenson/ruby-build)
+[ruby-build](https://github.com/sstephenson/ruby-build).
 
 
 #### Ubuntu
@@ -40,7 +40,7 @@ tentd-admin requires a PostgreSQL database.
 
 #### OS X
 
-Use [Homebrew](http://mxcl.github.com/homebrew/) or [Postgres.app](http://postgresapp.com/)
+Use [Homebrew](http://mxcl.github.com/homebrew/) or [Postgres.app](http://postgresapp.com/).
 
 ```shell
 brew install postgresql
@@ -67,9 +67,10 @@ DATABASE_URL=postgres://localhost/tent_server ADMIN_USERNAME=admin ADMIN_PASSWOR
 ```
 
 If all goes well, you'll have a Tent server available at
-http://localhost:3000/ and you can log into the admin interface at
-http://localhost:3000/admin with the username and password `admin`. After
-setting up the base profile in the admin, this should show the profile JSON:
+[http://localhost:3000/](http://localhost:3000/) and you can log into the admin
+interface at [http://localhost:3000/admin](http://postgresapp.com/) with the
+username and password `admin`. After setting up the base profile in the admin,
+this should show the profile JSON:
 
 ```shell
 curl http://localhost:3000/profile

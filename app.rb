@@ -49,7 +49,8 @@ class TentDAdmin < Sinatra::Base
 
     # Set TENT_ENTITY ENV
     if !ENV['TENT_ENTITY']
-      if info = ::TentD::Model::ProfileInfo.first(:type => TentD::Model::ProfileInfo::TENT_PROFILE_TYPE_URI)
+      core_type = TentD::TentType.new(TentD::Model::ProfileInfo::TENT_PROFILE_TYPE_URI)
+      if info = ::TentD::Model::ProfileInfo.first(:type_base => core_type.base)
         ENV['TENT_ENTITY'] = info.content['entity']
       end
     end

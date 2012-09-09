@@ -150,6 +150,8 @@ class TentDAdmin < Sinatra::Base
       return
     end
 
+    AdminConfig.app_authorization.update(:follow_url => "#{server_url}#{full_path('/followings')}")
+
     @core_profile_info = Hashie::Mash.new(
       :entity => ENV['TENT_ENTITY'] || server_url,
       :servers => [server_url]
@@ -177,6 +179,7 @@ class TentDAdmin < Sinatra::Base
     client = tent_client
     @followings = client.following.list.body
     @followings.map! { |f| Hashie::Mash.new(f) }
+    @entity = URI.decode(params[:entity]) if params[:entity]
     slim :followings
   end
 

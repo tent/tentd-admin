@@ -6,7 +6,7 @@ form.form-horizontal action=full_path("/followings") method="POST"
   .control-group
     label.control-label Entity URI
     .controls
-      input.input-xxlarge type='text' name='entity' &nbsp;
+      input.input-xxlarge type='text' name='entity' value=@entity &nbsp;
       input.btn.btn-success type='submit' name='commit' value='Follow'
 
 - @followings.each do |following|

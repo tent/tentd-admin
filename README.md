@@ -8,6 +8,16 @@ implementation.
 
 ## Getting Started
 
+### Heroku
+
+```shell
+heroku create --addons heroku-postgresql:dev
+heroku pg:promote $(heroku pg | head -1 | cut -f2 -d" ")
+heroku config:add ADMIN_USERNAME=admin ADMIN_PASSWORD=password
+git push heroku master
+heroku open
+```
+
 ### Ruby
 
 tentd-admin requires Ruby 1.9. If you don't have Ruby 1.9 you can use your

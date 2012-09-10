@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:tent/tent-client-ruby.git
+  remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tent-client-ruby.git
   revision: 2ffbb81ced9d8fc87b13340a840c4d8f1542a278
   branch: master
   specs:
@@ -10,8 +10,8 @@ GIT
       nokogiri
 
 GIT
-  remote: git@github.com:tent/tentd.git
-  revision: 010a5645be74d61bdfc3d49640cb6743dcf7860c
+  remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tentd.git
+  revision: 84c0ae907cd9e1adab0f636c67964c0fb2f51f2a
   branch: master
   specs:
     tentd (0.0.1)

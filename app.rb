@@ -20,7 +20,9 @@ class TentDAdmin < Sinatra::Base
     config.also_reload "*.rb"
 
     config.method_override = true
+  end
 
+  configure do
     # Setup Database
     DataMapper.setup(:default, ENV['DATABASE_URL'])
     DataMapper.auto_upgrade!

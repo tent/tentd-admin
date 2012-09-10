@@ -33,6 +33,7 @@ class TentDAdmin < Sinatra::Base
       tent_app = ::TentD::Model::App.create(
         :name => "Tent Admin",
         :description => "Default Tent Admin App",
+        :url => 'https://tent.io',
         :mac_key_id => mac_key_id,
         :redirect_uris => %w{ http://localhost:5000/admin?foo=bar },
         :scopes => {

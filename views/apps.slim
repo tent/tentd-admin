@@ -5,7 +5,8 @@ ul.unstyled
     li.app
       .row
         .span4
-          h3= app.name
+          h3
+            a href=app.url = app.name
         .span6
           ul.unstyled
             - app.authorizations.each do |auth|

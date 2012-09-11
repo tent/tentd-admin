@@ -1,0 +1,4 @@
+.control-group
+  legend = type
+  - data.each_pair do |name, value|
+    == slim :_profile_type_fields, :locals => { :type => type, :name => name, :value => value }

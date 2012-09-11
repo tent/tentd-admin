@@ -1,0 +1,17 @@
+- input_name = "#{type}[#{name}]"
+- if value.kind_of? Array
+  - input_name << '[]'
+  label.control-label for=input_name = name
+  .controls
+    select.input.input-xxlarge name=input_name multiple=true
+      - value.each do |option|
+        option value=option selected=true = option
+- elsif value.kind_of?(Hash)
+  - value.each_pair do |name, value|
+    .control-group.span8
+      legend = name
+      == slim :_profile_type_fields, :locals => { :type => type, :name => name, :value => value }
+- else
+  label.control-label for=input_name = name
+  .controls
+    input.input.input-xxlarge type='text' name=input_name value=value

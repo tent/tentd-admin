@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tentd.git
-  revision: bb9d1bc2468c5380bb1108d26746523d3c23e936
+  revision: 4f2327b1267fe5b4c34b9ff0b360896158ee66a2
   branch: master
   specs:
     tentd (0.0.1)

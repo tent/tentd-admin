@@ -1,0 +1,25 @@
+h2.page-header Profile
+
+form.form-horizontal action=full_path('/profile') method='POST'
+  == csrf_tag
+  == method_override('PUT')
+
+  - @profile.each_pair do |type, data|
+    .control-group
+      legend = type
+      - data.each_pair do |name, value|
+        - input_name = "#{type}[#{name}]"
+        - if value.kind_of? Array
+          - input_name << '[]'
+          label.control-label for=input_name = name
+          .controls
+            select.input.input-xxlarge name=input_name multiple=true
+              - value.each do |option|
+                option value=option selected=true = option
+        - else
+          label.control-label for=input_name = name
+          .controls
+            input.input.input-xxlarge type='text' name=input_name value=value
+
+  .form-actions
+    input.btn.btn-success type='submit' value='Save'

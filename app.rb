@@ -178,6 +178,22 @@ class TentDAdmin < Sinatra::Base
     redirect full_path('')
   end
 
+  get '/profile' do
+    client = tent_client
+    @profile = client.profile.get.body
+    slim :profile
+  end
+
+  put '/profile' do
+    client = tent_client
+    params.each_pair do |key, val|
+      next unless key =~ %r{tent.io/types/info}
+      client.profile.update(key, val)
+    end
+
+    redirect full_path('/profile')
+  end
+
   get '/followings' do
     client = tent_client
     @followings = client.following.list.body

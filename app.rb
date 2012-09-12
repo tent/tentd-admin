@@ -213,9 +213,13 @@ class TentDAdmin < Sinatra::Base
   end
 
   post '/followings' do
-    client = tent_client
-    client.following.create(params[:entity])
-    redirect full_path('/followings')
+    begin
+      client = tent_client
+      client.following.create(params[:entity])
+      redirect full_path('/followings')
+    rescue Faraday::Error::ConnectionFailed
+      redirect full_path('/followings')
+    end
   end
 
   delete '/followings/:id' do

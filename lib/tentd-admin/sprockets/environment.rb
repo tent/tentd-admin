@@ -14,7 +14,7 @@ module TentD
 
         paths = %w{ javascripts stylesheets images }
         paths.each do |path|
-          @assets.append_path((File.join(File.expand_path('../../../../', __FILE__), "assets/#{path}"))
+          @assets.append_path((File.join(File.expand_path('../../../../', __FILE__), "assets/#{path}")))
         end
         @assets
       end

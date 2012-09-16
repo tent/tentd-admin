@@ -1,4 +1,4 @@
-Copyright (c) 2012 Jonathan Rudenberg and Jesse Stuart
+Copyright (c) 2012 Jesse Stuart
 
 MIT License
 

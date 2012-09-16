@@ -1,7 +1,7 @@
-require 'bundler'
-Bundler.require
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-require './app'
+require 'tentd-admin/app'
 
 map '/' do
   run TentD.new
@@ -16,5 +16,5 @@ map '/oauth' do
 end
 
 map '/admin' do
-  run TentDAdmin
+  run TentD::Admin
 end

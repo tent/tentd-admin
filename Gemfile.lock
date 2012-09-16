@@ -1,6 +1,6 @@
 GIT
   remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tent-client-ruby.git
-  revision: 781deed3465dae51d8aad19bbbc7f65df3bf773c
+  revision: 4476b809e9f7f6bca4abef6f92f51d43a9ee218a
   branch: master
   specs:
     tent-client (0.0.1)
@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tentd.git
-  revision: 4f2327b1267fe5b4c34b9ff0b360896158ee66a2
+  revision: 8ef700115fd2240272a53577c322ff6beb9ca788
   branch: master
   specs:
     tentd (0.0.1)
@@ -23,6 +23,21 @@ GIT
       hashie
       rack-mount (~> 0.8.3)
       tent-client
+
+PATH
+  remote: .
+  specs:
+    tentd-admin (0.1.0)
+      coffee-script
+      hashie
+      puma
+      rack_csrf
+      sass
+      sinatra
+      slim
+      sprockets (~> 2.0)
+      tent-client
+      tentd
 
 GEM
   remote: https://rubygems.org/
@@ -142,14 +157,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  coffee-script
-  hashie
-  puma
-  rack_csrf
-  sass
-  sinatra
   sinatra-contrib
-  slim
-  sprockets (~> 2.0)
   tent-client!
   tentd!
+  tentd-admin!

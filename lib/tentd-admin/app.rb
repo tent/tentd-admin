@@ -70,9 +70,6 @@ module TentD
       username == ENV['ADMIN_USERNAME'] && password == ENV['ADMIN_PASSWORD']
     end
 
-    use Rack::Session::Cookie,  :key => 'tentd-adminapp.session',
-                                :expire_after => 2592000, # 1 month
-                                :secret => ENV['COOKIE_SECRET'] || SecureRandom.hex
     use Rack::Csrf
 
     include SprocketsEnvironment

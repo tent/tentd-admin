@@ -16,5 +16,8 @@ map '/oauth' do
 end
 
 map '/admin' do
+  use Rack::Session::Cookie,  :key => 'tentd-adminapp.session',
+                              :expire_after => 2592000, # 1 month
+                              :secret => ENV['COOKIE_SECRET'] || SecureRandom.hex
   run TentD::Admin
 end

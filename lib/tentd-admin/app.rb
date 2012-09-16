@@ -21,6 +21,11 @@ module TentD
       config.method_override = true
     end
 
+    configure do
+      set :asset_manifest, JSON.parse(File.read(ENV['ADMIN_ASSET_MANIFEST'])) if ENV['ADMIN_ASSET_MANIFEST']
+      set :cdn_url, ENV['ADMIN_CDN_URL']
+    end
+
     use Rack::Csrf
 
     include SprocketsEnvironment
@@ -31,11 +36,17 @@ module TentD
       end
 
       def asset_path(path)
-        path = assets.find_asset(path).digest_path
-        if ENV['ADMIN_CDN_URL']
-          "#{ENV['ADMIN_CDN_URL']}/assets/#{path}"
+        path = asset_manifest_path(path) || assets.find_asset(path).digest_path
+        if settings.cdn_url?
+          "#{settings.cdn_url}/assets/#{path}"
         else
           full_path("/assets/#{path}")
+        end
+      end
+
+      def asset_manifest_path(asset)
+        if settings.asset_manifest?
+          settings.asset_manifest['files'].detect { |k,v| v['logical_path'] == asset }[0]
         end
       end
 
@@ -87,10 +98,12 @@ module TentD
       end
     end
 
-    get '/assets/*' do
-      new_env = env.clone
-      new_env["PATH_INFO"].gsub!("/assets", "")
-      assets.call(new_env)
+    if ENV['RACK_ENV'] != 'production'
+      get '/assets/*' do
+        new_env = env.clone
+        new_env["PATH_INFO"].gsub!("/assets", "")
+        assets.call(new_env)
+      end
     end
 
     get '/' do

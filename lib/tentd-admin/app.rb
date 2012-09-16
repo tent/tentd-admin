@@ -11,6 +11,8 @@ require 'sass'
 
 module TentD
   class Admin < Sinatra::Base
+    require 'tentd-admin/sprockets/environment'
+
     AdminConfig = Struct.new(:app, :app_authorization).new(nil, nil)
 
     enable :sessions
@@ -73,9 +75,20 @@ module TentD
                                 :secret => ENV['COOKIE_SECRET'] || SecureRandom.hex
     use Rack::Csrf
 
+    include SprocketsEnvironment
+
     helpers do
       def path_prefix
         env['SCRIPT_NAME']
+      end
+
+      def asset_path(path)
+        path = assets.find_asset(path).digest_path
+        if ENV['CDN_URL']
+          "#{ENV['CDN_URL']}/assets/#{path}"
+        else
+          full_path("/assets/#{path}")
+        end
       end
 
       def full_path(path)
@@ -124,15 +137,6 @@ module TentD
       def tent_client
         ::TentClient.new(server_url, AdminConfig.app_authorization.auth_details)
       end
-    end
-
-    assets = Sprockets::Environment.new do |env|
-      env.logger = Logger.new(STDOUT)
-    end
-
-    paths = %w{ javascripts stylesheets images }
-    paths.each do |path|
-      assets.append_path("assets/#{path}")
     end
 
     get '/assets/*' do

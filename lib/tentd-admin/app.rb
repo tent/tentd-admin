@@ -17,13 +17,13 @@ module TentD
       require 'sinatra/reloader'
       register Sinatra::Reloader
       config.also_reload "*.rb"
-
-      config.method_override = true
     end
 
     configure do
       set :asset_manifest, JSON.parse(File.read(ENV['ADMIN_ASSET_MANIFEST'])) if ENV['ADMIN_ASSET_MANIFEST']
       set :cdn_url, ENV['ADMIN_CDN_URL']
+
+      config.method_override = true
     end
 
     use Rack::Csrf

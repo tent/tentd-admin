@@ -45,7 +45,7 @@ module TentD
       end
 
       def asset_manifest_path(asset)
-        if settings.asset_manifest?
+        if settings.respond_to?(:asset_manifest?) && settings.asset_manifest?
           settings.asset_manifest['files'].detect { |k,v| v['logical_path'] == asset }[0]
         end
       end

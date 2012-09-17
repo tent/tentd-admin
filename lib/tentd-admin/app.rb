@@ -96,6 +96,16 @@ module TentD
       def tent_client
         env['tent.client']
       end
+
+      def current_user
+        return unless defined?(TentD)
+        current = TentD::Model::User.current
+        current if session[:current_user_id] == current.id
+      end
+
+      def authenticate!
+        halt 403 unless current_user
+      end
     end
 
     if ENV['RACK_ENV'] != 'production'
@@ -107,10 +117,12 @@ module TentD
     end
 
     get '/' do
+      authenticate!
       slim :dashboard
     end
 
     get '/profile' do
+      authenticate!
       @profile = tent_client.profile.get.body
       @profile['https://tent.io/types/info/basic/v0.1.0'] ||= {
         'public' => true,
@@ -125,6 +137,7 @@ module TentD
     end
 
     put '/profile' do
+      authenticate!
       params.each_pair do |key, val|
         next unless key =~ %r{tent.io/types/info}
         tent_client.profile.update(key, val)
@@ -134,6 +147,7 @@ module TentD
     end
 
     get '/followings' do
+      authenticate!
       @followings = tent_client.following.list.body
       @followings.map! { |f| Hashie::Mash.new(f) }
       @entity = URI.decode(params[:entity]) if params[:entity]
@@ -141,6 +155,7 @@ module TentD
     end
 
     post '/followings' do
+      authenticate!
       begin
         tent_client.following.create(params[:entity])
         redirect full_path('/followings')
@@ -150,22 +165,26 @@ module TentD
     end
 
     delete '/followings/:id' do
+      authenticate!
       tent_client.following.delete(params[:id])
       redirect full_path('/followings')
     end
 
     get '/followers' do
+      authenticate!
       @followers = tent_client.follower.list.body
       @followers.map! { |f| Hashie::Mash.new(f) }
       slim :followers
     end
 
     delete '/followers/:id' do
+      authenticate!
       tent_client.follower.delete(params[:id])
       redirect full_path('/followers')
     end
 
     get '/apps' do
+      authenticate!
       @apps = tent_client.app.list.body
       @apps.kind_of?(Array) ? @apps.map! { |a| Hashie::Mash.new(a) } : @apps = []
       @apps = @apps.sort_by { |a| -a.authorizations.size }
@@ -173,16 +192,19 @@ module TentD
     end
 
     delete '/apps/:app_id' do
+      authenticate!
       tent_client.app.delete(params[:app_id])
       redirect full_path('/apps')
     end
 
     delete '/apps/:app_id/authorizations/:app_auth_id' do
+      authenticate!
       tent_client.app.authorization.delete(params[:app_id], params[:app_auth_id])
       redirect full_path('/apps')
     end
 
     get '/oauth/confirm' do
+      authenticate!
       @app_params = %w{ client_id redirect_uri state scope tent_profile_info_types tent_post_types tent_notification_url }.inject({}) { |memo, k|
         memo[k] = params[k] if params.has_key?(k)
         memo
@@ -229,6 +251,7 @@ module TentD
     end
 
     post '/oauth/confirm' do
+      authenticate!
       @app = Hashie::Mash.new(session.delete(:current_app))
       @app_params = Hashie::Mash.new(session.delete(:current_app_params))
 

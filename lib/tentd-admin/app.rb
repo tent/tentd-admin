@@ -23,7 +23,7 @@ module TentD
       set :asset_manifest, JSON.parse(File.read(ENV['ADMIN_ASSET_MANIFEST'])) if ENV['ADMIN_ASSET_MANIFEST']
       set :cdn_url, ENV['ADMIN_CDN_URL']
 
-      config.method_override = true
+      set :method_override, true
     end
 
     use Rack::Csrf

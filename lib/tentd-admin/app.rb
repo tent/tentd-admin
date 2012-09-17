@@ -126,12 +126,12 @@ module TentD
       @profile = tent_client.profile.get.body
       @profile['https://tent.io/types/info/basic/v0.1.0'] ||= {
         'public' => true,
-        'name' => 'Name to be displayed publicly',
-        'avatar_url' => 'URL to avatar to be displayed publicly',
-        'birthdate' => 'Date of birth in one of these formats: YYYY-MM-DD, YYYY-MM, MM-DD',
-        'location' => 'Location to be displayed publicly',
-        'gender' => 'Gender to be displayed publicly',
-        'bio' => 'Biography/self-description to be displayed publicly'
+        'name' => '',
+        'avatar_url' => '',
+        'birthdate' => '',
+        'location' => '',
+        'gender' => '',
+        'bio' => ''
       }
       slim :profile
     end

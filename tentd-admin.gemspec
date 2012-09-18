@@ -28,6 +28,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'hashie'
   gem.add_runtime_dependency 'slim'
 
-  gem.add_runtime_dependency 'sinatra-contrib'
   gem.add_development_dependency 'uglifier'
 end

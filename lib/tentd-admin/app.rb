@@ -13,12 +13,6 @@ module TentD
   class Admin < Sinatra::Base
     require 'tentd-admin/sprockets/environment'
 
-    configure :development do |config|
-      require 'sinatra/reloader'
-      register Sinatra::Reloader
-      config.also_reload "*.rb"
-    end
-
     configure do
       set :asset_manifest, JSON.parse(File.read(ENV['ADMIN_ASSET_MANIFEST'])) if ENV['ADMIN_ASSET_MANIFEST']
       set :cdn_url, ENV['ADMIN_CDN_URL']

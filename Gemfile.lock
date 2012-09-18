@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tent-client-ruby.git
-  revision: 4476b809e9f7f6bca4abef6f92f51d43a9ee218a
+  revision: 688394a0110ff8d5b1131f5e0b2c8824c98d8b1e
   branch: master
   specs:
     tent-client (0.0.1)
@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tentd.git
-  revision: 8ef700115fd2240272a53577c322ff6beb9ca788
+  revision: d7d4b936588a6cb8d3a1b30ffeb5afa7ce374d51
   branch: master
   specs:
     tentd (0.0.1)
@@ -42,6 +42,7 @@ PATH
       rack_csrf
       sass
       sinatra
+      sinatra-contrib
       slim
       sprockets (~> 2.0)
       tent-client
@@ -193,7 +194,6 @@ PLATFORMS
 DEPENDENCIES
   asset_sync!
   mime-types
-  sinatra-contrib
   tent-client!
   tentd!
   tentd-admin!

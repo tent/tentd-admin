@@ -1,0 +1,53 @@
+h2.page-header Profile
+
+form.form-horizontal action=full_path('/profile') method='POST'
+  == csrf_tag
+  == method_override('PUT')
+
+  - @profile.each_pair do |type, data|
+    == slim :_profile_type_section, :locals => { :type => type, :data => data }
+
+  .form-actions
+    input.btn.btn-success type='submit' value='Save'
+
+h2.page-header Authorized Apps
+
+ul.unstyled
+  - @apps.each do |app|
+    li.app
+      .row
+        .span4
+          h3
+            a href=app.url = app.name
+        .span6
+          ul.unstyled
+            - app.authorizations.each do |auth|
+              li.authorization
+                .row
+                  .span4
+                    h4.page-header Scopes
+                    = auth.scopes.map { |s| scope_name(s) }.join(', ')
+
+                    h4.page-header Post Types
+                    ul
+                      - auth.post_types.each do |post_type|
+                        li = post_type
+
+                    h4.page-header Profile Info Types
+                    ul
+                      - auth.profile_info_types.each do |info_type|
+                        li = info_type
+
+                  .span2
+                    - unless app.trusted
+                      form.remove-app action=full_path("/apps/#{app.id}/authorizations/#{auth.id}") method="POST"
+                        == method_override("DELETE")
+                        == csrf_tag
+                        input.btn.btn-danger type='submit' value="Revoke Authorization" confirm="Revoke #{app.name} Authorization?"
+        .span2
+          - unless app.trusted
+            form.remove-app action=full_path("/apps/#{app.id}") method="POST"
+              == method_override("DELETE")
+              == csrf_tag
+              input.btn.btn-danger type='submit' value="Remove App" confirm="Delete #{app.name}?"
+      hr/

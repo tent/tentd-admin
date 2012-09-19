@@ -112,11 +112,6 @@ module TentD
 
     get '/' do
       authenticate!
-      slim :dashboard
-    end
-
-    get '/profile' do
-      authenticate!
       @profile = tent_client.profile.get.body
       @profile['https://tent.io/types/info/basic/v0.1.0'] ||= {
         'public' => true,
@@ -127,7 +122,17 @@ module TentD
         'gender' => '',
         'bio' => ''
       }
-      slim :profile
+
+      @apps = tent_client.app.list.body
+      @apps.kind_of?(Array) ? @apps.map! { |a| Hashie::Mash.new(a) } : @apps = []
+      @apps = @apps.sort_by { |a| -a.authorizations.size }
+
+      slim :dashboard
+    end
+
+    get '/signout' do
+      session.clear
+      redirect full_path('/')
     end
 
     put '/profile' do
@@ -137,64 +142,19 @@ module TentD
         tent_client.profile.update(key, val)
       end
 
-      redirect full_path('/profile')
-    end
-
-    get '/followings' do
-      authenticate!
-      @followings = tent_client.following.list.body
-      @followings.map! { |f| Hashie::Mash.new(f) }
-      @entity = URI.decode(params[:entity]) if params[:entity]
-      slim :followings
-    end
-
-    post '/followings' do
-      authenticate!
-      begin
-        tent_client.following.create(params[:entity])
-        redirect full_path('/followings')
-      rescue Faraday::Error::ConnectionFailed
-        redirect full_path('/followings')
-      end
-    end
-
-    delete '/followings/:id' do
-      authenticate!
-      tent_client.following.delete(params[:id])
-      redirect full_path('/followings')
-    end
-
-    get '/followers' do
-      authenticate!
-      @followers = tent_client.follower.list.body
-      @followers.map! { |f| Hashie::Mash.new(f) }
-      slim :followers
-    end
-
-    delete '/followers/:id' do
-      authenticate!
-      tent_client.follower.delete(params[:id])
-      redirect full_path('/followers')
-    end
-
-    get '/apps' do
-      authenticate!
-      @apps = tent_client.app.list.body
-      @apps.kind_of?(Array) ? @apps.map! { |a| Hashie::Mash.new(a) } : @apps = []
-      @apps = @apps.sort_by { |a| -a.authorizations.size }
-      slim :apps
+      redirect full_path('/')
     end
 
     delete '/apps/:app_id' do
       authenticate!
       tent_client.app.delete(params[:app_id])
-      redirect full_path('/apps')
+      redirect full_path('/')
     end
 
     delete '/apps/:app_id/authorizations/:app_auth_id' do
       authenticate!
       tent_client.app.authorization.delete(params[:app_id], params[:app_auth_id])
-      redirect full_path('/apps')
+      redirect full_path('/')
     end
 
     get '/oauth/confirm' do

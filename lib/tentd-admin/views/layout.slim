@@ -8,19 +8,35 @@ head
 body
   .navbar.navbar-static-top
     .navbar-inner
-      .brand TentD Admin
+      .brand
+        - if current_user
+          a href==current_user.entity = current_user.entity.sub(%r{\Ahttps?://([^/]+).*?\z}) { |m| $1 }
+        - else
+          a href='https://tent.is' Tent.is
+
       ul.nav
-        li class=nav_active_class('/profile')
-          a href=full_path('/profile') Profile
+        - if current_user
+          li
+            a href==current_user.entity Posts
+          li
+            a href=full_path('/followers') Followers
+          li
+            a href=full_path('/followings') Following
+          li.active
+            a href=full_path('/admin') Account
+        - else
+          li
+            a href='https://tent.is/blog' Blog
 
-        li class=nav_active_class('/apps')
-          a href=full_path('/apps') Apps
-
-        li class=nav_active_class('/followings')
-          a href=full_path('/followings') Followings
-
-        li class=nav_active_class('/followers')
-          a href=full_path('/followers') Followers
+      ul.nav.pull-right
+        - if current_user
+          li
+            a href=full_path('/signout') Signout
+        - else
+          li
+            a href='https://tent.is/login' Login
+          li
+            a href='https://tent.is/signup' Signup
 
   .container
     == yield

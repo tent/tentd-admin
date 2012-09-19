@@ -8,13 +8,14 @@ require 'rack/csrf'
 require 'slim'
 require 'coffee_script'
 require 'sass'
+require 'oj'
 
 module TentD
   class Admin < Sinatra::Base
     require 'tentd-admin/sprockets/environment'
 
     configure do
-      set :asset_manifest, JSON.parse(File.read(ENV['ADMIN_ASSET_MANIFEST'])) if ENV['ADMIN_ASSET_MANIFEST']
+      set :asset_manifest, Oj.load(File.read(ENV['ADMIN_ASSET_MANIFEST'])) if ENV['ADMIN_ASSET_MANIFEST']
       set :cdn_url, ENV['ADMIN_CDN_URL']
 
       set :method_override, true

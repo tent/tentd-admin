@@ -9,18 +9,19 @@ GIT
 
 GIT
   remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tent-client-ruby.git
-  revision: 688394a0110ff8d5b1131f5e0b2c8824c98d8b1e
+  revision: d6ef5012f5e112306742b17f4e92be8655b21b8a
   branch: master
   specs:
     tent-client (0.0.1)
       faraday (= 0.8.4)
       faraday_middleware (= 0.8.8)
-      json
+      faraday_middleware-multi_json
       nokogiri
+      oj
 
 GIT
   remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tentd.git
-  revision: d7d4b936588a6cb8d3a1b30ffeb5afa7ce374d51
+  revision: d836e896cbae2aae4bffc8fa571ca81cb55067a1
   branch: master
   specs:
     tentd (0.0.1)
@@ -28,8 +29,8 @@ GIT
       dm-ar-finders (~> 1.2.0)
       dm-constraints (~> 1.2.0)
       dm-postgres-adapter (~> 1.2.0)
-      girl_friday (~> 0.10)
       hashie
+      json
       rack-mount (~> 0.8.3)
       tent-client
 
@@ -63,7 +64,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.3.3)
-    connection_pool (0.9.2)
     data_mapper (1.2.0)
       dm-aggregates (~> 1.2.0)
       dm-constraints (~> 1.2.0)
@@ -121,6 +121,9 @@ GEM
       multipart-post (~> 1.1)
     faraday_middleware (0.8.8)
       faraday (>= 0.7.4, < 0.9)
+    faraday_middleware-multi_json (0.0.3)
+      faraday_middleware
+      multi_json
     fastercsv (1.5.5)
     fog (1.6.0)
       builder
@@ -133,11 +136,10 @@ GEM
       nokogiri (~> 1.5.0)
       ruby-hmac
     formatador (0.2.3)
-    girl_friday (0.10.0)
-      connection_pool (~> 0.9.0)
     hashie (1.2.0)
     hike (1.2.1)
     i18n (0.6.1)
+    jruby-pageant (1.1.1)
     json (1.7.5)
     json_pure (1.7.5)
     mime-types (1.19)
@@ -145,8 +147,10 @@ GEM
     multipart-post (1.1.5)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
-    net-ssh (2.5.2)
+    net-ssh (2.6.0)
+      jruby-pageant (>= 1.1.1)
     nokogiri (1.5.5)
+    oj (1.3.4)
     rack (1.4.1)
     rack-mount (0.8.3)
       rack (>= 1.0.0)
@@ -163,7 +167,7 @@ GEM
     slim (1.3.0)
       temple (~> 0.4.1)
       tilt (~> 1.3.3)
-    sprockets (2.5.0)
+    sprockets (2.6.0)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)

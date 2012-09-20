@@ -19,7 +19,7 @@ body
           li
             a href==current_user.entity Posts
           li
-            a href==full_path("/entities/#{URI.encode_www_form_component(current_user.entity)}") View Profile
+            a href==full_path("../entities/#{URI.encode_www_form_component(current_user.entity)}") View Profile
           li
             a href=full_path('/followers') Followers
           li

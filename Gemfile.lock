@@ -1,15 +1,6 @@
 GIT
-  remote: git://github.com/titanous/asset_sync.git
-  revision: 64f86044921b7029cf3be673a1920aa7fdfe8604
-  branch: fix-mime
-  specs:
-    asset_sync (0.5.0)
-      activemodel
-      fog
-
-GIT
-  remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tent-client-ruby.git
-  revision: d6ef5012f5e112306742b17f4e92be8655b21b8a
+  remote: git://github.com/tent/tent-client-ruby.git
+  revision: f4a62a14e429564301972f4a4852633f3fd81a75
   branch: master
   specs:
     tent-client (0.0.1)
@@ -20,8 +11,8 @@ GIT
       oj
 
 GIT
-  remote: https://tent-travis:OcVukficyojtyuc4@github.com/tent/tentd.git
-  revision: cfa9b768f64248d26ae984264829c737d1e507fc
+  remote: git://github.com/tent/tentd.git
+  revision: 6376e66a173d0d6d41d9631a02a34b5998d9fde7
   branch: master
   specs:
     tentd (0.0.1)
@@ -34,10 +25,19 @@ GIT
       rack-mount (~> 0.8.3)
       tent-client
 
+GIT
+  remote: git://github.com/titanous/asset_sync.git
+  revision: 64f86044921b7029cf3be673a1920aa7fdfe8604
+  branch: fix-mime
+  specs:
+    asset_sync (0.5.0)
+      activemodel
+      fog
+
 PATH
   remote: .
   specs:
-    tentd-admin (0.1.0)
+    tentd-admin (0.0.1)
       coffee-script
       hashie
       rack_csrf

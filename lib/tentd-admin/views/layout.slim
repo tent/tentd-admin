@@ -21,9 +21,9 @@ body
           li
             a href==full_path('../profile') Profile
           li
-            a href=full_path('/followers') Followers
+            a href=full_path('../followers') Followers
           li
-            a href=full_path('/followings') Following
+            a href=full_path('../followings') Following
           li.active
             a href=full_path('/admin') Account
         - else
@@ -33,7 +33,7 @@ body
       ul.nav.pull-right
         - if current_user
           li
-            a href=full_path('/signout') Signout
+            a href=full_path('../signout') Signout
         - else
           li
             a href='https://tent.is/login' Login

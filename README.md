@@ -13,7 +13,7 @@ implementation.
 ```shell
 heroku create --addons heroku-postgresql:dev
 heroku pg:promote $(heroku pg | head -1 | cut -f2 -d" ")
-heroku config:add ADMIN_USERNAME=admin ADMIN_PASSWORD=password
+heroku config:add ADMIN_USERNAME=admin ADMIN_PASSWORD=password SERVE_ASSETS=1
 git push heroku master
 heroku open
 ```

@@ -8,12 +8,11 @@
         option value=option selected=true = option
 - elsif value.kind_of?(Hash)
   - value.each_pair do |name, value|
+    - next if %w( groups entities public ).include?(name.to_s)
     .control-group.span8
       legend = name
       == slim :_profile_type_fields, :locals => { :type => type, :name => name, :value => value }
 - elsif value.kind_of?(TrueClass) || value.kind_of?(FalseClass)
-  label.checkbox
-    input type='checkbox' name=input_name value='true' checked=value = name
 - else
   label.control-label for=input_name = name
   .controls

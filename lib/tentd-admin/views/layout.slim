@@ -9,47 +9,7 @@ body
   .navbar.navbar-static-top
     .navbar-inner
       .brand
-        - if current_user
-          a href==current_user.entity = current_user.entity.sub(%r{\Ahttps?://([^/]+).*?\z}) { |m| $1 }
-        - else
-          a href='https://tent.is' Tent.is
-
-      ul.nav
-        - if current_user
-          li
-            a href==current_user.entity Posts
-          li
-            a href==full_path('../profile') Profile
-          li
-            a href=full_path('../followers') Followers
-          li
-            a href=full_path('../followings') Following
-          li.active
-            a href=full_path('/admin') Account
-        - else
-          li
-            a href='https://tent.is/blog' Blog
-
-      ul.nav.pull-right
-        - if current_user
-          li
-            a href=full_path('../signout') Signout
-        - else
-          li
-            a href='https://tent.is/login' Login
-          li
-            a href='https://tent.is/signup' Signup
+          a href='/admin' Tent Admin
 
   .container
     == yield
-
-  footer.navbar-fixed-bottom
-    a href='/terms' Terms 
-    ' |
-    a href='/privacy' Privacy 
-    ' |
-    a href='/partners' Partners 
-    ' |
-    a href='mailto:contact@tent.is' Contact 
-    ' |
-    | &copy; 2012 Apollic Software, LLC  

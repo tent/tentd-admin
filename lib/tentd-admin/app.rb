@@ -103,7 +103,7 @@ module TentD
       end
     end
 
-    if ENV['RACK_ENV'] != 'production'
+    if ENV['RACK_ENV'] != 'production' || ENV['SERVE_ASSETS']
       get '/assets/*' do
         new_env = env.clone
         new_env["PATH_INFO"].gsub!("/assets", "")

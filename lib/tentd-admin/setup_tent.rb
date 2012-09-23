@@ -14,7 +14,7 @@ class SetupTent
   private
 
   def set_client(env)
-    app = TentD::Model::App.first(:url => 'http://tent-admin') || create_app(env)
+    app = TentD::Model::App.first(:url => 'https://github.com/tent/tentd-admin') || create_app(env)
     auth = app.authorizations.first
     env['tent.app'] = app
     env['tent.app_auth'] = auth
@@ -25,7 +25,7 @@ class SetupTent
     app = TentD::Model::App.create(
       :name => "Tent Admin",
       :description => "Tent Admin App",
-      :url => 'http://tent-admin'
+      :url => 'https://github.com/tent/tentd-admin'
     )
     app.authorizations.create(
       :scopes => %w(read_posts write_posts import_posts read_profile write_profile read_followers write_followers read_followings write_followings read_groups write_groups read_permissions write_permissions read_apps write_apps follow_ui read_secrets write_secrets),

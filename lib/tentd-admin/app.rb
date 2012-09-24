@@ -139,6 +139,7 @@ module TentD
       authenticate!
       params.each_pair do |key, val|
         next unless key =~ %r{tent.io/types/info}
+        val['permissions']['public'] = true
         tent_client.profile.update(key, val)
       end
 

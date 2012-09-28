@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/tent/tent-client-ruby.git
-  revision: 20b395b0774e7e08794f4c1573905726114f1c9a
+  revision: 27fe028eb40786eefcd8c9edb45219953a7b288c
   branch: master
   specs:
     tent-client (0.0.1)
@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: git://github.com/tent/tentd.git
-  revision: 1f4ea5a500668c9cfcb74ce5fca152eb77d3c28d
+  revision: dd6054b93638fa0383a5512f1d557e0daca6ef8c
   branch: master
   specs:
     tentd (0.0.1)

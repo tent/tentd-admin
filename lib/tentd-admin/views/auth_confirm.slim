@@ -6,12 +6,13 @@ form.form-horizontal action=full_path("oauth/confirm") method="POST"
   .row
     .span6
       legend Scopes
-      - (@app.scopes || {}).each_pair do |scope, description|
+      - (@app_params.scope || '').split(',').each do |scope|
         .control-group
           .controls
             label.control-label
               input.pull-left name=scope type='checkbox' checked=true = ' ' + scope_name(scope)
-              blockquote = description
+              - if description = (@app.scope || {})[scope]
+                blockquote = description
 
     .span6
       legend Post Types

@@ -8,14 +8,13 @@ require 'rack/csrf'
 require 'slim'
 require 'coffee_script'
 require 'sass'
-require 'oj'
 
 module TentD
   class Admin < Sinatra::Base
     require 'tentd-admin/sprockets/environment'
 
     configure do
-      set :asset_manifest, Oj.load(File.read(ENV['ADMIN_ASSET_MANIFEST'])) if ENV['ADMIN_ASSET_MANIFEST']
+      set :asset_manifest, Yajl::Parser.parse(File.read(ENV['ADMIN_ASSET_MANIFEST'])) if ENV['ADMIN_ASSET_MANIFEST']
       set :cdn_url, ENV['ADMIN_CDN_URL']
 
       set :method_override, true
@@ -170,18 +169,18 @@ module TentD
       @app = session[:current_app] = tent_client.app.get(@app_params.client_id).body
       @app = @app.kind_of?(Hash) ? Hashie::Mash.new(@app) : @app
 
-      @app ||= "Invalid client_id"
+      @app ||= "invalid_client_id"
 
       redirect_uri = URI(@app_params.redirect_uri.to_s)
       redirect_uri.query ||= ""
       if @app.kind_of?(String)
-        redirect_uri.query += "error=#{URI.encode(@app)}"
+        redirect_uri.query += "error=server_error&error_description=#{URI.encode(@app)}"
         redirect redirect_uri.to_s
         return
       end
 
       unless @app.redirect_uris.to_a.include?(@app_params.redirect_uri)
-        redirect_uri.query += 'error=invalid_redirect_uri'
+        redirect_uri.query += 'error=access_denied&error_description=invalid_redirect_uri'
         redirect redirect_uri.to_s
         return
       end
@@ -214,14 +213,14 @@ module TentD
       redirect_uri.query ||= ""
 
       if params[:commit] == 'Abort'
-        redirect_uri.query += "error=user_abort"
+        redirect_uri.query += "error=access_denied&error_description=user_abort"
         redirect redirect_uri.to_s
         return
       end
 
       data = {
-        :scopes => (@app.scopes || {}).inject([]) { |memo, (k,v)|
-          params[k] == 'on' ? memo << k : nil
+        :scopes => (@app_params.scope || []).split(',').inject([]) { |memo, scope|
+          params[scope] == 'on' ? memo << scope : nil
           memo
         },
         :profile_info_types => @app_params.tent_profile_info_types.to_s.split(',').select { |type|
@@ -234,7 +233,7 @@ module TentD
       }
       authorization = Hashie::Mash.new(tent_client.app.authorization.create(@app.id, data).body)
 
-      redirect_uri.query +="&code=#{authorization.token_code}"
+      redirect_uri.query +="code=#{authorization.token_code}"
       redirect_uri.query += "&state=#{@app_params.state}" if @app_params.has_key?(:state)
       redirect redirect_uri.to_s
     end

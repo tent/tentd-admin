@@ -39,7 +39,7 @@ If you need to switch between ruby versions, use
 #### Ubuntu
 
 ```shell
-sudo apt-get install ruby1.9.1-full libxml2 libxml2-dev libxslt1-dev
+sudo apt-get install build-essential ruby1.9.1-full libxml2 libxml2-dev libxslt1-dev
 sudo update-alternatives --config ruby # make sure 1.9 is the default
 ```
 

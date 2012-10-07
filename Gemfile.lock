@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: git://github.com/tent/tentd.git
-  revision: dd6054b93638fa0383a5512f1d557e0daca6ef8c
+  revision: ce64102b68981024e31c4bc80db2ce90c48c7dd2
   branch: master
   specs:
     tentd (0.0.1)
@@ -24,6 +24,7 @@ GIT
       json
       rack-mount (~> 0.8.3)
       tent-client
+      yajl-ruby
 
 GIT
   remote: git://github.com/titanous/asset_sync.git

@@ -86,6 +86,22 @@ this should show the profile JSON:
 curl http://localhost:3000/profile
 ```
 
+### Environment Variables
+
+Some environment variables should be set to configure tentd and tentd-admin.
+
+| Name | Required | Description |
+| ---- | -------- | ----------- |
+| DATABASE_URL | Required | The connection details for the PostgreSQL database (ex: `postgres://user:password@host/dbname`) |
+| ADMIN_USERNAME | Required | The username used to access tentd-admin. |
+| ADMIN_PASSWORD | Required | The password used to access tentd-admin. |
+| RACK_ENV | Optional | Defaults to `development`. Set to `production` for production deployments. |
+| SERVE_ASSETS | Optional | Should be set if `RACK_ENV` is set to `production` and assets aren't on a CDN. |
+| TENT_ENTITY | Optional | Set to the exact Tent Entity URL if tentd is not responding to requests at the URL. |
+
+### HTTP Headers
+
+If you are running a reverse-proxy in front of tentd, the `X-Forwarded-Port` and `Host` request headers need to be set.
 
 ## Contributing
 

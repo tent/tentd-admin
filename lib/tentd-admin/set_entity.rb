@@ -4,7 +4,7 @@ class SetEntity
   end
 
   def call(env)
-    env['tent.entity'] = (env['HTTP_X_FORWARDED_PROTO'] || env['rack.url_scheme']) + '://' + env['HTTP_HOST']
+    env['tent.entity'] = ENV['TENT_ENTITY'] || ((env['HTTP_X_FORWARDED_PROTO'] || env['rack.url_scheme']) + '://' + env['HTTP_HOST'])
     @app.call(env)
   end
 end

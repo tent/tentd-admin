@@ -167,7 +167,8 @@ module TentD
       session[:current_app_params] = @app_params
       @app_params = Hashie::Mash.new(@app_params)
 
-      @app = session[:current_app] = tent_client.app.get(@app_params.client_id).body
+      @app = tent_client.app.get(@app_params.client_id).body
+      session[:current_app_id] = @app['id']
       @app = @app.kind_of?(Hash) ? Hashie::Mash.new(@app) : @app
 
       @app ||= "invalid_client_id"
@@ -186,20 +187,22 @@ module TentD
         return
       end
 
-      # TODO: allow updating tent_profile_info_types, tent_post_types, scopes
-      #       (user must confirm adding anything)
-
       if @app.authorizations.any?
-        authorization = @app.authorizations.first
+        authorization = @app.authorizations.last
 
         unless authorization.notification_url == @app_params.tent_notification_url
           tent_client.app.authorization.update(@app.id, authorization.id, :notification_url => @app_params.notification_url)
         end
 
-        redirect_uri.query +="&code=#{authorization.token_code}"
-        redirect_uri.query += "&state=#{@app_params.state}" if @app_params.has_key?(:state)
-        redirect redirect_uri.to_s
-        return
+        if authorization.profile_info_types.to_a.sort == @app_params.tent_profile_info_types.to_s.split(',').sort &&
+           authorization.post_types.to_a.sort == @app_params.tent_post_types.to_s.split(',').sort &&
+           authorization.scopes.to_a.sort == @app_params.scope.to_s.split(',').sort
+
+          redirect_uri.query += "&code=#{authorization.token_code}"
+          redirect_uri.query += "&state=#{@app_params.state}" if @app_params.has_key?(:state)
+          redirect redirect_uri.to_s
+          return
+        end
       end
 
       slim :auth_confirm
@@ -207,7 +210,7 @@ module TentD
 
     post '/oauth/confirm' do
       authenticate!
-      @app = Hashie::Mash.new(session.delete(:current_app))
+      @app = Hashie::Mash.new(tent_client.app.get(session.delete(:current_app_id)).body)
       @app_params = Hashie::Mash.new(session.delete(:current_app_params))
 
       redirect_uri = URI(@app_params.redirect_uri.to_s)
@@ -220,7 +223,7 @@ module TentD
       end
 
       data = {
-        :scopes => (@app_params.scope || []).split(',').inject([]) { |memo, scope|
+        :scopes => @app_params.scope.to_s.split(',').inject([]) { |memo, scope|
           params[scope] == 'on' ? memo << scope : nil
           memo
         },

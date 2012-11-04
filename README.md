@@ -103,6 +103,33 @@ Some environment variables should be set to configure tentd and tentd-admin.
 
 If you are running a reverse-proxy in front of tentd, the `X-Forwarded-Port` and `Host` request headers need to be set.
 
+#### nginx
+
+```
+location / {
+  proxy_set_header Host $host;
+  proxy_set_header X-Forwarded-Proto https;
+  proxy_set_header X-Forwarded-Port 443;
+  proxy_pass http://tentd;
+}
+```
+
+#### apache
+
+```
+<VirtualHost tentd.example.com>
+ProxyRequests Off
+ProxyPreserveHost On
+ProxyPass / http://localhost:3000/
+ProxyPassReverse / http://localhost:3000
+
+RequestHeader set Host tentd.example.com
+RequestHeader set X-Forwarded-Proto https
+RequestHeader set X-Forwarded-Port 443
+
+</VirtualHost>
+```
+
 ## Contributing
 
 Currently tentd-admin only implements app authentication and following creation.

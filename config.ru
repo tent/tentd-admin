@@ -20,8 +20,7 @@ end
 
 map '/oauth' do
   run lambda { |env|
-    auth_url = ((env['HTTP_X_FORWARDED_PROTO'] || env['rack.url_scheme']) + '://
-' + env['HTTP_HOST'])
+    auth_url = ((env['HTTP_X_FORWARDED_PROTO'] || env['rack.url_scheme']) + '://' + env['HTTP_HOST'])
     auth_url += '/admin/oauth/confirm'
     auth_url += "?#{env['QUERY_STRING']}"
     [301, { "Location" => auth_url }, []] }

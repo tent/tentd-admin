@@ -6,10 +6,9 @@ require 'tentd-admin/app'
 require 'tentd-admin/setup_tent'
 require 'tentd-admin/set_entity'
 require 'rack/ssl-enforcer'
+require 'logger'
 
-DataMapper.finalize
-DataMapper.setup(:default, ENV['DATABASE_URL'])
-DataMapper.auto_upgrade!
+Sequel.connect(ENV['DATABASE_URL'], :logger => Logger.new(STDOUT))
 
 use Rack::SslEnforcer, hsts: true if ENV['RACK_ENV'] == 'production'
 

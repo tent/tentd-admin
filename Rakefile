@@ -28,3 +28,9 @@ task :deploy_assets => :gzip_assets do
   require './config/asset_sync'
   AssetSync.sync
 end
+
+namespace :db do
+  task :migrate do
+    %x{bundle exec sequel -m `bundle show tentd`/db/migrations #{ENV['DATABASE_URL']}}
+  end
+end

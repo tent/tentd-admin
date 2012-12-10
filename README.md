@@ -5,6 +5,27 @@ tentd-admin implements a very basic administration interface for
 it's the easiest way to get started with a [Tent Protocol](http://tent.io)
 implementation.
 
+## Updating to 0.2
+
+You'll need to create a table `schema_info` and set `schema_info.version = 1`, then run `rake db:migrate`:
+
+```sql
+CREATE TABLE schema_info (version integer);
+UPDATE schema_info SET version = 1;
+```
+
+### Heroku
+
+```
+heroku run rake db:migrate
+```
+
+### Ruby
+
+```
+DATABASE_URL=postgres://localhost/tent_server bundle exec rake db:migrate
+```
+
 
 ## Getting Started
 
@@ -13,6 +34,7 @@ implementation.
 ```shell
 heroku create --addons heroku-postgresql:dev
 heroku pg:promote $(heroku pg | head -1 | cut -f2 -d" ")
+heroku run rake db:migrate
 heroku config:add ADMIN_USERNAME=admin ADMIN_PASSWORD=password SERVE_ASSETS=1
 git push heroku master
 heroku open

@@ -11,7 +11,7 @@ You'll need to create a table `schema_info` and set `schema_info.version = 1`, t
 
 ```sql
 CREATE TABLE schema_info (version integer);
-UPDATE schema_info SET version = 1;
+INSERT INTO schema_info (version) VALUES (1);
 ```
 
 ### Heroku

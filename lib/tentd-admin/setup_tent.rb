@@ -27,7 +27,7 @@ class SetupTent
       :description => "Tent Admin App",
       :url => 'https://github.com/tent/tentd-admin'
     )
-    Tent::Model::AppAuthorization.create(
+    TentD::Model::AppAuthorization.create(
       :app_id => app.id,
       :scopes => %w(read_posts write_posts import_posts read_profile write_profile read_followers write_followers read_followings write_followings read_groups write_groups read_permissions write_permissions read_apps write_apps follow_ui read_secrets write_secrets),
       :profile_info_types => ['all'],

@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'coffee-script'
   gem.add_runtime_dependency 'hashie'
   gem.add_runtime_dependency 'slim', '1.3.0'
+  gem.add_runtime_dependency 'uglifier'
 
   gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'uglifier'
 end

@@ -46,6 +46,7 @@ PATH
       sprockets (~> 2.0)
       tent-client
       tentd
+      uglifier
 
 GEM
   remote: https://rubygems.org/
@@ -143,4 +144,3 @@ DEPENDENCIES
   tent-client!
   tentd!
   tentd-admin!
-  uglifier

@@ -140,6 +140,12 @@ module TentD
         'bio' => ''
       }
 
+      blacklist = %w( tent_version version )
+
+      @profile.each_pair do |type, content|
+        blacklist.each { |k| content.delete(k) }
+      end
+
       @apps = tent_client.app.list.body
       @apps.kind_of?(Array) ? @apps.map! { |a| Hashie::Mash.new(a) } : @apps = []
       @apps = @apps.sort_by { |a| -a.authorizations.size }

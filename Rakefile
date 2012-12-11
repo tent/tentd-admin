@@ -37,8 +37,4 @@ namespace :assets do
   task :precompile => :deploy_assets
 end
 
-namespace :db do
-  task :migrate do
-    %x{bundle exec sequel -m `bundle show tentd`/db/migrations #{ENV['DATABASE_URL']}}
-  end
-end
+require 'tentd/tasks/db'

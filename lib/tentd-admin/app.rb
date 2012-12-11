@@ -102,11 +102,28 @@ module TentD
       end
     end
 
-    if ENV['RACK_ENV'] != 'production' || ENV['SERVE_ASSETS']
+    if ENV['RACK_ENV'] != 'production' || ENV['SERVE_ASSETS'] || ENV['ADMIN_ASSET_MANIFEST']
       get '/assets/*' do
-        new_env = env.clone
-        new_env["PATH_INFO"].gsub!("/assets", "")
-        assets.call(new_env)
+        asset = params[:splat].first
+        path = "./public/assets/#{asset}"
+        if File.exists?(path)
+          content_type = case asset.split('.').last
+                         when 'css'
+                           'text/css'
+                         when 'js'
+                           'application/javascript'
+                         end
+          headers = { 'Content-Type' => content_type } if content_type
+          [200, headers, [File.read(path)]]
+        else
+          if ENV['RACK_ENV'] != 'production' || ENV['SERVE_ASSETS']
+            new_env = env.clone
+            new_env["PATH_INFO"].gsub!("/assets", "")
+            settings.assets.call(new_env)
+          else
+            halt 404
+          end
+        end
       end
     end
 

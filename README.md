@@ -119,6 +119,7 @@ Some environment variables should be set to configure tentd and tentd-admin.
 | ADMIN_PASSWORD | Required | The password used to access tentd-admin. |
 | RACK_ENV | Optional | Defaults to `development`. Set to `production` for production deployments. |
 | SERVE_ASSETS | Optional | Should be set if `RACK_ENV` is set to `production` and assets aren't on a CDN. |
+| ADMIN_ASSET_MANIFEST | Optional | Should be set if `RACK_ENV` is set to `production` and `SERVE_ASSETS` is not set. |
 | TENT_ENTITY | Optional | Set to the exact Tent Entity URL if tentd is not responding to requests at the URL. |
 
 ### HTTP Headers

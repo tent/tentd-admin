@@ -14,6 +14,7 @@ module TentD
     require 'tentd-admin/sprockets/environment'
 
     configure do
+      set :assets, SprocketsEnvironment.assets
       set :asset_manifest, Yajl::Parser.parse(File.read(ENV['ADMIN_ASSET_MANIFEST'])) if ENV['ADMIN_ASSET_MANIFEST']
       set :cdn_url, ENV['ADMIN_CDN_URL']
 
@@ -22,15 +23,13 @@ module TentD
 
     use Rack::Csrf
 
-    include SprocketsEnvironment
-
     helpers do
       def path_prefix
         env['SCRIPT_NAME']
       end
 
       def asset_path(path)
-        path = asset_manifest_path(path) || assets.find_asset(path).digest_path
+        path = asset_manifest_path(path) || settings.assets.find_asset(path).digest_path
         if settings.cdn_url?
           "#{settings.cdn_url}/assets/#{path}"
         else

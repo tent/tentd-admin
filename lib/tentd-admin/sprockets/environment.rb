@@ -3,7 +3,7 @@ require 'tentd-admin/sprockets/helpers'
 module TentD
   class Admin
     module SprocketsEnvironment
-      def assets
+      def self.assets
         return @assets if defined?(@assets)
         @assets = Sprockets::Environment.new do |env|
           env.logger = Logger.new(STDOUT)

@@ -99,6 +99,10 @@ module TentD
       def authenticate!
         halt 403 unless current_user
       end
+
+      def basic_profile_uri
+        'https://tent.io/types/info/basic/v0.1.0'
+      end
     end
 
     if ENV['RACK_ENV'] != 'production' || ENV['SERVE_ASSETS'] || ENV['ADMIN_ASSET_MANIFEST']
@@ -129,15 +133,10 @@ module TentD
     get '/' do
       authenticate!
       @profile = tent_client.profile.get.body
-      @profile['https://tent.io/types/info/basic/v0.1.0'] ||= {
-        'public' => true,
-        'name' => '',
-        'avatar_url' => '',
-        'birthdate' => '',
-        'location' => '',
-        'gender' => '',
-        'bio' => ''
-      }
+      @profile[basic_profile_uri] = {}
+
+      %w( name avatar_url birthdate location gender bio website_url ).each { |k| @profile[basic_profile_uri][k] ||= '' }
+      @profile[basic_profile_uri]['public'] ||= true
 
       blacklist = %w( tent_version version )
 

@@ -133,7 +133,7 @@ module TentD
     get '/' do
       authenticate!
       @profile = tent_client.profile.get.body
-      @profile[basic_profile_uri] = {}
+      @profile[basic_profile_uri] ||= {}
 
       %w( name avatar_url birthdate location gender bio website_url ).each { |k| @profile[basic_profile_uri][k] ||= '' }
       @profile[basic_profile_uri]['public'] ||= true

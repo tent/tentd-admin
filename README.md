@@ -95,6 +95,7 @@ Clone this repository, and `cd` into the directory. This should start the app:
 
 ```shell
 bundle install
+DATABASE_URL=postgres://localhost/tent_server bundle exec rake db:migrate
 DATABASE_URL=postgres://localhost/tent_server ADMIN_USERNAME=admin ADMIN_PASSWORD=admin bundle exec puma -p 3000
 ```
 

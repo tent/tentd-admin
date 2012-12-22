@@ -8,6 +8,7 @@ gem 'tentd', :git => 'git://github.com/tent/tentd.git', :branch => 'master'
 gem 'girl_friday'
 gem 'rack-ssl-enforcer'
 gem 'puma'
+gem 'addressable'
 
 group :development do
   gem 'asset_sync', :git => 'git://github.com/titanous/asset_sync.git', :branch => 'fix-mime'

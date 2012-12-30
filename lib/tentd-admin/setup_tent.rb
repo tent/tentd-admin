@@ -53,6 +53,6 @@ class SetupTent
   end
 
   def server_url(env)
-    (env['HTTP_X_FORWARDED_PROTO'] || env['rack.url_scheme']) + '://' + env['HTTP_HOST']
+    ENV['TENT_SERVER'] || ((env['HTTP_X_FORWARDED_PROTO'] || env['rack.url_scheme']) + '://' + env['HTTP_HOST'])
   end
 end

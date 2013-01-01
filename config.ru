@@ -14,20 +14,21 @@ Sequel.connect(ENV['DATABASE_URL'], :logger => Logger.new(STDOUT))
 
 use Rack::SslEnforcer, hsts: true if ENV['RACK_ENV'] == 'production'
 
-map '/' do
+map (ENV['TENT_SUBDIR'] || '') + '/' do
   use SetEntity
   run TentD.new
 end
 
-map '/oauth' do
+map (ENV['TENT_SUBDIR'] || '') + '/oauth' do
   run lambda { |env|
     auth_url = ((env['HTTP_X_FORWARDED_PROTO'] || env['rack.url_scheme']) + '://' + env['HTTP_HOST'])
+    auth_url += (ENV['TENT_SUBDIR'] || '')
     auth_url += '/admin/oauth/confirm'
     auth_url += "?#{env['QUERY_STRING']}"
     [301, { "Location" => auth_url }, []] }
 end
 
-map '/admin' do
+map (ENV['TENT_SUBDIR'] || '') + '/admin' do
   use Rack::Session::Cookie,  :key => 'tent.session',
                               :expire_after => 2592000, # 1 month
                               :secret => ENV['COOKIE_SECRET'] || SecureRandom.hex

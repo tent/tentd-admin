@@ -122,7 +122,7 @@ Some environment variables should be set to configure tentd and tentd-admin.
 | SERVE_ASSETS | Optional | Should be set if `RACK_ENV` is set to `production` and assets aren't on a CDN. |
 | ADMIN_ASSET_MANIFEST | Optional | Should be set if `RACK_ENV` is set to `production` and `SERVE_ASSETS` is not set. |
 | TENT_ENTITY | Optional | Set to the exact Tent Entity URL if tentd is not responding to requests at the URL. |
-| TENT_SERVER | Optional | Set if tent is mounted anywhere other than the url root. |
+| TENT_SUBDIR | Optional | Treat all URLs as being under a subdirectory, e.g. "/tent". |
 
 ### HTTP Headers
 

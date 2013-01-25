@@ -211,6 +211,8 @@ module TentD
       if @app.authorizations.any?
         authorization = @app.authorizations.last
 
+        session[:auth_id] = authorization.id
+
         unless authorization.notification_url == @app_params.tent_notification_url
           tent_client.app.authorization.update(@app.id, authorization.id, :notification_url => @app_params.notification_url)
         end
@@ -233,6 +235,7 @@ module TentD
       authenticate!
       @app = Hashie::Mash.new(tent_client.app.get(session.delete(:current_app_id)).body)
       @app_params = Hashie::Mash.new(session.delete(:current_app_params))
+      auth_id = session.delete(:auth_id)
 
       redirect_uri = URI(@app_params.redirect_uri.to_s)
       redirect_uri.query ||= ""
@@ -256,9 +259,20 @@ module TentD
         },
         :notification_url => @app_params.tent_notification_url
       }
-      authorization = Hashie::Mash.new(tent_client.app.authorization.create(@app.id, data).body)
 
-      redirect_uri.query +="code=#{authorization.token_code}"
+      if auth_id
+        res = tent_client.app.authorization.update(@app.id, auth_id, data)
+      else
+        res = tent_client.app.authorization.create(@app.id, data)
+      end
+
+      if res.success?
+        authorization = Hashie::Mash.new(res.body)
+        redirect_uri.query +="code=#{authorization.token_code}"
+      else
+        redirect_uri.query +="&error=access_denied&error_description=unknown"
+      end
+
       redirect_uri.query += "&state=#{@app_params.state}" if @app_params.has_key?(:state)
       redirect redirect_uri.to_s
     end

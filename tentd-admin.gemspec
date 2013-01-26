@@ -21,7 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'tentd'
 
   gem.add_runtime_dependency 'sinatra'
-  gem.add_runtime_dependency 'rack_csrf'
   gem.add_runtime_dependency 'sprockets', '~> 2.0'
   gem.add_runtime_dependency 'sass'
   gem.add_runtime_dependency 'coffee-script'

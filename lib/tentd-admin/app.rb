@@ -4,10 +4,10 @@ require 'sprockets'
 require 'hashie'
 require 'tentd'
 require 'tent-client'
-require 'rack/csrf'
 require 'slim'
 require 'coffee_script'
 require 'sass'
+require 'securerandom'
 
 module TentD
   class Admin < Sinatra::Base
@@ -20,8 +20,6 @@ module TentD
 
       set :method_override, true
     end
-
-    use Rack::Csrf
 
     helpers do
       def path_prefix
@@ -47,8 +45,12 @@ module TentD
         "#{path_prefix}/#{path}".gsub(%r{//}, '/')
       end
 
+      def csrf_token
+        session[:csrf_token] ||= SecureRandom.hex
+      end
+
       def csrf_tag
-        Rack::Csrf.tag(env)
+        "<input type='hidden' name='_csrf' value='#{csrf_token}' />"
       end
 
       def method_override(method)
@@ -94,6 +96,10 @@ module TentD
         return unless defined?(TentD)
         current = TentD::Model::User.current
         current if session[:current_user_id] == current.id
+      end
+
+      def authenticate_csrf!
+        halt 403 unless params[:_csrf] == session[:csrf_token]
       end
 
       def authenticate!
@@ -158,6 +164,7 @@ module TentD
 
     put '/profile' do
       authenticate!
+      authenticate_csrf!
       params.each_pair do |key, val|
         next unless key =~ %r{tent.io/types/info}
         (val['permissions'] ||= {})['public'] = true
@@ -169,12 +176,14 @@ module TentD
 
     delete '/apps/:app_id' do
       authenticate!
+      authenticate_csrf!
       tent_client.app.delete(params[:app_id])
       redirect full_path('/')
     end
 
     delete '/apps/:app_id/authorizations/:app_auth_id' do
       authenticate!
+      authenticate_csrf!
       tent_client.app.authorization.delete(params[:app_id], params[:app_auth_id])
       redirect full_path('/')
     end
@@ -233,6 +242,7 @@ module TentD
 
     post '/oauth/confirm' do
       authenticate!
+      authenticate_csrf!
       @app = Hashie::Mash.new(tent_client.app.get(session.delete(:current_app_id)).body)
       @app_params = Hashie::Mash.new(session.delete(:current_app_params))
       auth_id = session.delete(:auth_id)

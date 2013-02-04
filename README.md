@@ -20,9 +20,9 @@ heroku run rake db:migrate
 heroku open
 ```
 
-The last command will open your Tent server in a web browser. Your Tent **entity** is in the address bar (example: "https://quiet-tent-123.herokuapp.com").
+The last command will open your Tent server in a web browser. Your Tent **entity** is in the address bar (example: `https://quiet-tent-123.herokuapp.com`).
 
-Add `/admin` to the end of the web address to continue setup (example: "https://quiet-tent-123.herokuapp.com/admin")
+Add `/admin` to the end of the web address to continue setup (example: `https://quiet-tent-123.herokuapp.com/admin`)
 
 Your username will be `admin`, and password `password` (unless you chose something different in the setup commands above). 
 

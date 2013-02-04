@@ -32,6 +32,8 @@ DATABASE_URL=postgres://localhost/tent_server bundle exec rake db:migrate
 ### Heroku
 
 ```shell
+git clone git://github.com/tent/tentd-admin.git
+cd tentd-admin
 heroku create --addons heroku-postgresql:dev
 heroku pg:promote $(heroku pg | head -1 | cut -f2 -d" ")
 heroku config:add ADMIN_USERNAME=admin ADMIN_PASSWORD=password ADMIN_ASSET_MANIFEST=./public/assets/manifest.json

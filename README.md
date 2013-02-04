@@ -5,29 +5,7 @@ tentd-admin implements a very basic administration interface for
 it's the easiest way to get started with a [Tent Protocol](http://tent.io)
 implementation.
 
-## Updating to 0.2
-
-You'll need to create a table `schema_info` and set `schema_info.version = 1`, then run `rake db:migrate`:
-
-```sql
-CREATE TABLE schema_info (version integer);
-INSERT INTO schema_info (version) VALUES (1);
-```
-
-### Heroku
-
-```
-heroku run rake db:migrate
-```
-
-### Ruby
-
-```
-DATABASE_URL=postgres://localhost/tent_server bundle exec rake db:migrate
-```
-
-
-## Getting Started
+## Quick Start with Heroku
 
 ### Heroku
 
@@ -41,6 +19,18 @@ git push heroku master
 heroku run rake db:migrate
 heroku open
 ```
+
+The last command will open your Tent server in a web browser. Your Tent **entity** is in the address bar (example: "https://quiet-tent-123.herokuapp.com").
+
+Add `/admin` to the end of the web address to continue setup (example: "https://quiet-tent-123.herokuapp.com/admin")
+
+Your username will be `admin`, and password `password` (unless you chose something different in the setup commands above). 
+
+You can edit your profile and manage apps in **TentAdmin**.
+
+You'll need another Tent app to get started. Check out [TentStatus](https://github.com/tent/tent-status) or some of the [other apps](https://github.com/tent/tent.io/wiki/Related-projects) that are already available.
+
+## Standard Installation
 
 ### Ruby
 
@@ -155,6 +145,27 @@ RequestHeader set X-Forwarded-Proto https
 RequestHeader set X-Forwarded-Port 443
 
 </VirtualHost>
+```
+
+## Updating to 0.2
+
+You'll need to create a table `schema_info` and set `schema_info.version = 1`, then run `rake db:migrate`:
+
+```sql
+CREATE TABLE schema_info (version integer);
+INSERT INTO schema_info (version) VALUES (1);
+```
+
+### Heroku
+
+```
+heroku run rake db:migrate
+```
+
+### Ruby
+
+```
+DATABASE_URL=postgres://localhost/tent_server bundle exec rake db:migrate
 ```
 
 ## Contributing

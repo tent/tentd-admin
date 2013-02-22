@@ -31,7 +31,7 @@ end
 map (ENV['TENT_SUBDIR'] || '') + '/admin' do
   use Rack::Session::Cookie,  :key => 'tent.session',
                               :expire_after => 2592000, # 1 month
-                              :secret => ENV['COOKIE_SECRET'] || SecureRandom.hex
+                              :secret => (ENV['COOKIE_SECRET'] ||= SecureRandom.hex)
   use(Rack::Auth::Basic, 'Tent Admin') { |u,p| u == ENV['ADMIN_USERNAME'] && p == ENV['ADMIN_PASSWORD'] }
   use SetupTent
   run TentD::Admin

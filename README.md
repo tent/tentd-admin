@@ -14,7 +14,7 @@ git clone git://github.com/tent/tentd-admin.git
 cd tentd-admin
 heroku create --addons heroku-postgresql:dev
 heroku pg:promote $(heroku pg | head -1 | cut -f2 -d" ")
-heroku config:add ADMIN_USERNAME=admin ADMIN_PASSWORD=password ADMIN_ASSET_MANIFEST=./public/assets/manifest.json
+heroku config:add ADMIN_USERNAME=admin ADMIN_PASSWORD=password ADMIN_ASSET_MANIFEST=./public/assets/manifest.json COOKIE_SECRET=$(openssl rand -hex 32)
 git push heroku master
 heroku run rake db:migrate
 heroku open
@@ -110,6 +110,7 @@ Some environment variables should be set to configure tentd and tentd-admin.
 | DATABASE_URL | Required | The connection details for the PostgreSQL database (ex: `postgres://user:password@host/dbname`) |
 | ADMIN_USERNAME | Required | The username used to access tentd-admin. |
 | ADMIN_PASSWORD | Required | The password used to access tentd-admin. |
+| COOKIE_SECRET | Optional | The session secret. Set if you don't want a new session every time you reboot the app. |
 | RACK_ENV | Optional | Defaults to `development`. Set to `production` for production deployments. |
 | SERVE_ASSETS | Optional | Should be set if `RACK_ENV` is set to `production` and assets aren't on a CDN. |
 | ADMIN_ASSET_MANIFEST | Optional | Should be set if `RACK_ENV` is set to `production` and `SERVE_ASSETS` is not set. |

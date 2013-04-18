@@ -93,7 +93,7 @@ DATABASE_URL=postgres://localhost/tent_server ADMIN_USERNAME=admin ADMIN_PASSWOR
 
 If all goes well, you'll have a Tent server available at
 [http://localhost:3000/](http://localhost:3000/) and you can log into the admin
-interface at [http://localhost:3000/admin](http://postgresapp.com/) with the
+interface at [http://localhost:3000/admin](http://localhost:3000/admin) with the
 username and password `admin`. After setting up the base profile in the admin,
 this should show the profile JSON:
 

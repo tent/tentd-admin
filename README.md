@@ -1,5 +1,7 @@
 # tentd-admin
 
+**NOTE: This code is Tent v0.2 specific and is thus outdated. See [tentd-omnibus](https://github.com/tent/tentd-omnibus) instead.**
+
 tentd-admin implements a very basic administration interface for
 [tentd](https://github.com/tent/tentd). It also mounts tentd as a Rack app, so
 it's the easiest way to get started with a [Tent Protocol](http://tent.io)
